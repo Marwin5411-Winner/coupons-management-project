@@ -13,16 +13,44 @@ export function ScannerPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<ScanResult | null>(null);
   const [manualCode, setManualCode] = useState('');
+  const [countdown, setCountdown] = useState(5);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const isInitialized = useRef(false);
+  const countdownTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     return () => {
       if (scannerRef.current && isScanning) {
         scannerRef.current.stop().catch(() => {});
       }
+      if (countdownTimerRef.current) {
+        clearInterval(countdownTimerRef.current);
+      }
     };
   }, [isScanning]);
+
+  // Auto-close modal after 5 seconds on success
+  useEffect(() => {
+    if (result?.success) {
+      setCountdown(5);
+
+      countdownTimerRef.current = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            handleNextQRCode();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => {
+        if (countdownTimerRef.current) {
+          clearInterval(countdownTimerRef.current);
+        }
+      };
+    }
+  }, [result]);
 
   const startScanning = async () => {
     try {
@@ -102,6 +130,26 @@ export function ScannerPage() {
     }
   };
 
+  const handleNextQRCode = () => {
+    if (countdownTimerRef.current) {
+      clearInterval(countdownTimerRef.current);
+    }
+    setResult(null);
+    setCountdown(5);
+    // Optionally auto-restart scanner
+    if (!isScanning) {
+      startScanning();
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (countdownTimerRef.current) {
+      clearInterval(countdownTimerRef.current);
+    }
+    setResult(null);
+    setCountdown(5);
+  };
+
   return (
     <>
       <Navbar />
@@ -174,49 +222,74 @@ export function ScannerPage() {
               </button>
             </form>
           </div>
+        </div>
+      </div>
 
-          {/* Result */}
-          {result && (
-            <div className={`rounded-lg p-6 border-2 ${
-              result.success
-                ? 'bg-green-50 border-green-500'
-                : 'bg-red-50 border-red-500'
+      {/* Result Modal */}
+      {result && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all ${
+            result.success ? 'border-4 border-green-500' : 'border-4 border-red-500'
+          }`}>
+            {/* Modal Header */}
+            <div className={`px-6 py-4 rounded-t-lg ${
+              result.success ? 'bg-green-50' : 'bg-red-50'
             }`}>
-              <div className="text-center">
+              <div className="flex justify-between items-center">
+                <h3 className={`text-xl font-bold ${
+                  result.success ? 'text-green-800' : 'text-red-800'
+                }`}>
+                  {result.success ? 'Redemption Successful!' : 'Redemption Failed'}
+                </h3>
+                <button
+                  onClick={handleCloseModal}
+                  className="text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-8">
+              <div className="text-center mb-6">
                 <div className="mb-4">
                   {result.success ? (
-                    <svg className="w-16 h-16 mx-auto text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <div className="relative inline-block">
+                      <svg className="w-24 h-24 mx-auto text-green-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {result.success && (
+                        <div className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg shadow-lg">
+                          {countdown}
+                        </div>
+                      )}
+                    </div>
                   ) : (
-                    <svg className="w-16 h-16 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-24 h-24 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   )}
                 </div>
 
-                <h3 className={`text-2xl font-bold mb-2 ${
-                  result.success ? 'text-green-800' : 'text-red-800'
-                }`}>
-                  {result.success ? 'Success!' : 'Error'}
-                </h3>
-
-                <p className={`text-lg mb-4 ${
+                <p className={`text-xl mb-6 font-medium ${
                   result.success ? 'text-green-700' : 'text-red-700'
                 }`}>
                   {result.message}
                 </p>
 
                 {result.coupon && (
-                  <div className="bg-white rounded-lg p-4 mb-4 text-left max-w-md mx-auto border border-gray-200">
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="font-medium text-gray-700">Code:</span>
-                        <span className="font-mono text-gray-900">{result.coupon.code}</span>
+                  <div className="bg-gray-50 rounded-lg p-5 mb-6 border border-gray-200">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold text-gray-700">Coupon Code:</span>
+                        <span className="font-mono text-lg font-bold text-gray-900">{result.coupon.code}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="font-medium text-gray-700">Status:</span>
-                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold text-gray-700">Status:</span>
+                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${
                           result.coupon.status === 'AVAILABLE'
                             ? 'bg-green-100 text-green-800'
                             : result.coupon.status === 'USED'
@@ -226,21 +299,53 @@ export function ScannerPage() {
                           {result.coupon.status}
                         </span>
                       </div>
+                      {result.coupon.campaign && (
+                        <div className="flex justify-between items-center">
+                          <span className="font-semibold text-gray-700">Campaign:</span>
+                          <span className="text-gray-900">{result.coupon.campaign.name}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
 
+                {result.success && (
+                  <p className="text-sm text-gray-600 mb-4">
+                    Auto-closing in {countdown} second{countdown !== 1 ? 's' : ''}...
+                  </p>
+                )}
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex gap-3">
                 <button
-                  onClick={() => setResult(null)}
-                  className="px-6 py-2.5 bg-gray-700 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors"
+                  onClick={handleNextQRCode}
+                  className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-md ${
+                    result.success
+                      ? 'bg-green-600 hover:bg-green-700 text-white'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
                 >
-                  Scan Another
+                  <div className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Next QR Code
+                  </div>
                 </button>
+                {!result.success && (
+                  <button
+                    onClick={handleCloseModal}
+                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                  >
+                    Close
+                  </button>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
