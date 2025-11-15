@@ -26,6 +26,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/campaigns"
+        element={
+          <ProtectedRoute adminOnly>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/campaigns/new"
         element={
           <ProtectedRoute adminOnly>
