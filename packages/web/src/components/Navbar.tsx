@@ -11,87 +11,51 @@ export function Navbar() {
   };
 
   return (
-    <nav style={styles.nav}>
-      <div style={styles.container}>
-        <Link to="/" style={styles.brand}>
-          Coupon Management
-        </Link>
-
-        <div style={styles.menu}>
-          {isAdmin && (
-            <>
-              <Link to="/dashboard" style={styles.link}>
-                Dashboard
-              </Link>
-              <Link to="/campaigns" style={styles.link}>
-                Campaigns
-              </Link>
-            </>
-          )}
-          <Link to="/scanner" style={styles.link}>
-            Scanner
+    <nav className="bg-gray-800 shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <Link to="/" className="text-white text-xl font-bold hover:text-gray-200 transition-colors">
+            Coupon Management
           </Link>
-        </div>
 
-        <div style={styles.user}>
-          <span style={styles.userName}>
-            {user?.name} ({user?.role})
-          </span>
-          <button onClick={handleLogout} style={styles.logoutBtn}>
-            Logout
-          </button>
+          <div className="flex gap-6">
+            {isAdmin && (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-300 hover:text-white transition-colors font-medium"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/campaigns"
+                  className="text-gray-300 hover:text-white transition-colors font-medium"
+                >
+                  Campaigns
+                </Link>
+              </>
+            )}
+            <Link
+              to="/scanner"
+              className="text-gray-300 hover:text-white transition-colors font-medium"
+            >
+              Scanner
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-gray-300 text-sm">
+              {user?.name} <span className="text-gray-400">({user?.role})</span>
+            </span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </nav>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  nav: {
-    backgroundColor: '#1f2937',
-    padding: '1rem 0',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 1rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  brand: {
-    color: 'white',
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    textDecoration: 'none',
-  },
-  menu: {
-    display: 'flex',
-    gap: '1.5rem',
-  },
-  link: {
-    color: '#d1d5db',
-    textDecoration: 'none',
-    fontSize: '1rem',
-    transition: 'color 0.2s',
-  },
-  user: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-  },
-  userName: {
-    color: '#d1d5db',
-    fontSize: '0.9rem',
-  },
-  logoutBtn: {
-    backgroundColor: '#ef4444',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '0.25rem',
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-  },
-};

@@ -105,183 +105,142 @@ export function ScannerPage() {
   return (
     <>
       <Navbar />
-      <div style={styles.container}>
-        <h1 style={styles.title}>QR Code Scanner</h1>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
+            QR Code Scanner
+          </h1>
 
-        <div style={styles.scannerContainer}>
-          <div id="qr-reader" style={{ width: '100%', maxWidth: '500px' }}></div>
+          {/* Scanner Section */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
+            <div className="flex flex-col items-center">
+              <div id="qr-reader" className="w-full max-w-md mb-6"></div>
 
-          <div style={styles.controls}>
-            {!isScanning ? (
-              <button onClick={startScanning} style={styles.startBtn}>
-                Start Scanner
-              </button>
-            ) : (
-              <button onClick={stopScanning} style={styles.stopBtn}>
-                Stop Scanner
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div style={styles.divider}>OR</div>
-
-        <form onSubmit={handleManualSubmit} style={styles.manualForm}>
-          <h3>Enter Code Manually</h3>
-          <div style={styles.manualInput}>
-            <input
-              type="text"
-              value={manualCode}
-              onChange={(e) => setManualCode(e.target.value)}
-              placeholder="Enter coupon code"
-              style={styles.input}
-            />
-            <button type="submit" style={styles.submitBtn}>
-              Validate
-            </button>
-          </div>
-        </form>
-
-        {result && (
-          <div
-            style={{
-              ...styles.result,
-              backgroundColor: result.success ? '#d1fae5' : '#fee2e2',
-              borderColor: result.success ? '#10b981' : '#ef4444',
-            }}
-          >
-            <h3 style={{
-              color: result.success ? '#065f46' : '#991b1b',
-              marginBottom: '1rem',
-            }}>
-              {result.success ? 'Success!' : 'Error'}
-            </h3>
-            <p style={{
-              fontSize: '1.2rem',
-              color: result.success ? '#065f46' : '#991b1b',
-              marginBottom: '1rem',
-            }}>
-              {result.message}
-            </p>
-            {result.coupon && (
-              <div style={styles.couponInfo}>
-                <p><strong>Code:</strong> {result.coupon.code}</p>
-                <p><strong>Status:</strong> {result.coupon.status}</p>
+              <div className="flex gap-4">
+                {!isScanning ? (
+                  <button
+                    onClick={startScanning}
+                    className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Start Camera
+                  </button>
+                ) : (
+                  <button
+                    onClick={stopScanning}
+                    className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                    </svg>
+                    Stop Camera
+                  </button>
+                )}
               </div>
-            )}
-            <button
-              onClick={() => setResult(null)}
-              style={styles.closeBtn}
-            >
-              Scan Another
-            </button>
+            </div>
           </div>
-        )}
+
+          {/* Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-gray-50 px-4 text-gray-600 font-medium">OR</span>
+            </div>
+          </div>
+
+          {/* Manual Entry */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Enter Code Manually
+            </h3>
+            <form onSubmit={handleManualSubmit} className="flex gap-3">
+              <input
+                type="text"
+                value={manualCode}
+                onChange={(e) => setManualCode(e.target.value)}
+                placeholder="Enter coupon code"
+                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <button
+                type="submit"
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Validate
+              </button>
+            </form>
+          </div>
+
+          {/* Result */}
+          {result && (
+            <div className={`rounded-lg p-6 border-2 ${
+              result.success
+                ? 'bg-green-50 border-green-500'
+                : 'bg-red-50 border-red-500'
+            }`}>
+              <div className="text-center">
+                <div className="mb-4">
+                  {result.success ? (
+                    <svg className="w-16 h-16 mx-auto text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-16 h-16 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )}
+                </div>
+
+                <h3 className={`text-2xl font-bold mb-2 ${
+                  result.success ? 'text-green-800' : 'text-red-800'
+                }`}>
+                  {result.success ? 'Success!' : 'Error'}
+                </h3>
+
+                <p className={`text-lg mb-4 ${
+                  result.success ? 'text-green-700' : 'text-red-700'
+                }`}>
+                  {result.message}
+                </p>
+
+                {result.coupon && (
+                  <div className="bg-white rounded-lg p-4 mb-4 text-left max-w-md mx-auto border border-gray-200">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="font-medium text-gray-700">Code:</span>
+                        <span className="font-mono text-gray-900">{result.coupon.code}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-medium text-gray-700">Status:</span>
+                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          result.coupon.status === 'AVAILABLE'
+                            ? 'bg-green-100 text-green-800'
+                            : result.coupon.status === 'USED'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {result.coupon.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setResult(null)}
+                  className="px-6 py-2.5 bg-gray-700 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors"
+                >
+                  Scan Another
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '2rem 1rem',
-  },
-  title: {
-    fontSize: '2rem',
-    fontWeight: 'bold',
-    color: '#1f2937',
-    textAlign: 'center',
-    marginBottom: '2rem',
-  },
-  scannerContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '1rem',
-    marginBottom: '2rem',
-  },
-  controls: {
-    display: 'flex',
-    gap: '1rem',
-  },
-  startBtn: {
-    backgroundColor: '#10b981',
-    color: 'white',
-    padding: '1rem 2rem',
-    border: 'none',
-    borderRadius: '0.5rem',
-    fontSize: '1.1rem',
-    fontWeight: '500',
-    cursor: 'pointer',
-  },
-  stopBtn: {
-    backgroundColor: '#ef4444',
-    color: 'white',
-    padding: '1rem 2rem',
-    border: 'none',
-    borderRadius: '0.5rem',
-    fontSize: '1.1rem',
-    fontWeight: '500',
-    cursor: 'pointer',
-  },
-  divider: {
-    textAlign: 'center',
-    color: '#6b7280',
-    fontSize: '1.2rem',
-    margin: '2rem 0',
-    fontWeight: 'bold',
-  },
-  manualForm: {
-    backgroundColor: 'white',
-    padding: '2rem',
-    borderRadius: '0.5rem',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    marginBottom: '2rem',
-  },
-  manualInput: {
-    display: 'flex',
-    gap: '1rem',
-    marginTop: '1rem',
-  },
-  input: {
-    flex: 1,
-    padding: '0.75rem',
-    border: '1px solid #d1d5db',
-    borderRadius: '0.25rem',
-    fontSize: '1rem',
-  },
-  submitBtn: {
-    backgroundColor: '#3b82f6',
-    color: 'white',
-    padding: '0.75rem 1.5rem',
-    border: 'none',
-    borderRadius: '0.25rem',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    fontWeight: '500',
-  },
-  result: {
-    padding: '2rem',
-    borderRadius: '0.5rem',
-    border: '2px solid',
-    textAlign: 'center',
-  },
-  couponInfo: {
-    backgroundColor: 'white',
-    padding: '1rem',
-    borderRadius: '0.25rem',
-    marginBottom: '1rem',
-    textAlign: 'left',
-  },
-  closeBtn: {
-    backgroundColor: '#374151',
-    color: 'white',
-    padding: '0.75rem 1.5rem',
-    border: 'none',
-    borderRadius: '0.25rem',
-    cursor: 'pointer',
-    fontSize: '1rem',
-  },
-};
