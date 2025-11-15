@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+}
+
+enum CouponStatus {
+  AVAILABLE
+  USED
+  EXPIRED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  redemptions RedemptionLog[]
+
+  @@map("users")
+}
+
+model Campaign {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  totalLimit  Int      // จำนวนคูปองทั้งหมดที่สร้างได้
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  coupons Coupon[]
+
+  @@map("campaigns")
+}
+
+model Coupon {
+  id         String       @id @default(uuid())
+  code       String       @unique // รหัสคูปองที่ไม่ซ้ำ
+  qrCode     String       @unique // QR Code data
+  status     CouponStatus @default(AVAILABLE)
+  campaignId String
+  campaign   Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  redemptions RedemptionLog[]
+
+  @@index([campaignId])
+  @@index([code])
+  @@index([status])
+  @@map("coupons")
+}
+
+model RedemptionLog {
+  id         String   @id @default(uuid())
+  couponId   String
+  coupon     Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  redeemedAt DateTime @default(now())
+
+  @@index([couponId])
+  @@index([userId])
+  @@map("redemption_logs")
+}
