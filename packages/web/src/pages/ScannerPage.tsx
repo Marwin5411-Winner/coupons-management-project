@@ -14,6 +14,7 @@ export function ScannerPage() {
   const [result, setResult] = useState<ScanResult | null>(null);
   const [manualCode, setManualCode] = useState('');
   const [countdown, setCountdown] = useState(5);
+  const [isProcessing, setIsProcessing] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const isInitialized = useRef(false);
   const countdownTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -53,6 +54,13 @@ export function ScannerPage() {
   }, [result]);
 
   const startScanning = async () => {
+    // Ensure scanner is fully stopped before starting
+    if (scannerRef.current && isScanning) {
+      await stopScanning();
+      // Add small delay to ensure clean state
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
     try {
       if (!isInitialized.current) {
         scannerRef.current = new Html5Qrcode('qr-reader');
@@ -70,6 +78,7 @@ export function ScannerPage() {
 
       setIsScanning(true);
       setResult(null);
+      setIsProcessing(false);
     } catch (err) {
       console.error('Error starting scanner:', err);
       alert('Failed to start camera. Please ensure camera permissions are granted.');
@@ -88,7 +97,24 @@ export function ScannerPage() {
   };
 
   const onScanSuccess = async (decodedText: string) => {
-    await stopScanning();
+    // Prevent multiple scans while processing
+    if (isProcessing) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    // Immediately stop scanning
+    if (scannerRef.current && isScanning) {
+      try {
+        await scannerRef.current.stop();
+        setIsScanning(false);
+      } catch (err) {
+        console.error('Error stopping scanner:', err);
+      }
+    }
+
+    // Process the redemption
     await validateAndRedeem(decodedText);
   };
 
@@ -103,6 +129,7 @@ export function ScannerPage() {
           message: validateRes.data.message,
           coupon: validateRes.data.coupon,
         });
+        setIsProcessing(false);
         return;
       }
 
@@ -119,27 +146,30 @@ export function ScannerPage() {
         success: false,
         message: error.response?.data?.message || 'Failed to process coupon',
       });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (manualCode.trim()) {
+    if (manualCode.trim() && !isProcessing) {
+      setIsProcessing(true);
       await validateAndRedeem(manualCode.trim());
       setManualCode('');
     }
   };
 
-  const handleNextQRCode = () => {
+  const handleNextQRCode = async () => {
     if (countdownTimerRef.current) {
       clearInterval(countdownTimerRef.current);
     }
     setResult(null);
     setCountdown(5);
-    // Optionally auto-restart scanner
-    if (!isScanning) {
-      startScanning();
-    }
+    setIsProcessing(false);
+
+    // Auto-restart scanner after closing modal
+    await startScanning();
   };
 
   const handleCloseModal = () => {
@@ -148,6 +178,7 @@ export function ScannerPage() {
     }
     setResult(null);
     setCountdown(5);
+    setIsProcessing(false);
   };
 
   return (
@@ -168,12 +199,13 @@ export function ScannerPage() {
                 {!isScanning ? (
                   <button
                     onClick={startScanning}
-                    className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
+                    disabled={isProcessing}
+                    className="px-8 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
-                    Start Camera
+                    {isProcessing ? 'Processing...' : 'Start Camera'}
                   </button>
                 ) : (
                   <button
@@ -212,13 +244,15 @@ export function ScannerPage() {
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
                 placeholder="Enter coupon code"
-                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={isProcessing}
+                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
               />
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                disabled={isProcessing}
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium transition-colors"
               >
-                Validate
+                {isProcessing ? 'Processing...' : 'Validate'}
               </button>
             </form>
           </div>
