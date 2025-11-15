@@ -206,4 +206,68 @@ export const couponRoutes = new Elysia({ prefix: "/coupons" })
         campaignId: t.Optional(t.String()),
       }),
     }
+  )
+  .post(
+    "/bulk-delete",
+    async ({ body, set }) => {
+      try {
+        const { couponIds } = body;
+
+        const result = await prisma.coupon.deleteMany({
+          where: {
+            id: { in: couponIds },
+          },
+        });
+
+        return {
+          message: "Coupons deleted successfully",
+          count: result.count,
+        };
+      } catch (error) {
+        console.error("Error deleting coupons:", error);
+        set.status = 500;
+        return { error: "Failed to delete coupons" };
+      }
+    },
+    {
+      body: t.Object({
+        couponIds: t.Array(t.String()),
+      }),
+    }
+  )
+  .post(
+    "/bulk-update-status",
+    async ({ body, set }) => {
+      try {
+        const { couponIds, status } = body;
+
+        const result = await prisma.coupon.updateMany({
+          where: {
+            id: { in: couponIds },
+          },
+          data: {
+            status,
+          },
+        });
+
+        return {
+          message: "Coupons updated successfully",
+          count: result.count,
+        };
+      } catch (error) {
+        console.error("Error updating coupons:", error);
+        set.status = 500;
+        return { error: "Failed to update coupons" };
+      }
+    },
+    {
+      body: t.Object({
+        couponIds: t.Array(t.String()),
+        status: t.Union([
+          t.Literal("AVAILABLE"),
+          t.Literal("USED"),
+          t.Literal("EXPIRED"),
+        ]),
+      }),
+    }
   );

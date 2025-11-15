@@ -153,4 +153,31 @@ export const campaignRoutes = new Elysia({ prefix: "/campaigns" })
       set.status = 500;
       return { error: "Failed to fetch campaign stats" };
     }
-  });
+  })
+  .post(
+    "/bulk-delete",
+    async ({ body, set }) => {
+      try {
+        const { campaignIds } = body;
+
+        const result = await prisma.campaign.deleteMany({
+          where: {
+            id: { in: campaignIds },
+          },
+        });
+
+        return {
+          message: "Campaigns deleted successfully",
+          count: result.count
+        };
+      } catch (error) {
+        set.status = 500;
+        return { error: "Failed to delete campaigns" };
+      }
+    },
+    {
+      body: t.Object({
+        campaignIds: t.Array(t.String()),
+      }),
+    }
+  );

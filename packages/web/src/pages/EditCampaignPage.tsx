@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import api from '../lib/api';
 import { Navbar } from '../components/Navbar';
 
-export function CreateCampaignPage() {
+export function EditCampaignPage() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -14,20 +16,55 @@ export function CreateCampaignPage() {
     endDate: '',
   });
 
+  useEffect(() => {
+    fetchCampaign();
+  }, [id]);
+
+  const fetchCampaign = async () => {
+    try {
+      const response = await api.get(`/campaigns/${id}`);
+      const campaign = response.data.campaign;
+
+      setFormData({
+        name: campaign.name,
+        description: campaign.description || '',
+        totalLimit: campaign.totalLimit,
+        startDate: campaign.startDate.split('T')[0],
+        endDate: campaign.endDate.split('T')[0],
+      });
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to load campaign');
+      navigate('/dashboard');
+    } finally {
+      setFetching(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await api.post('/campaigns', formData);
-      alert('Campaign created successfully!');
+      await api.patch(`/campaigns/${id}`, formData);
+      alert('Campaign updated successfully!');
       navigate('/dashboard');
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Failed to create campaign');
+      alert(error.response?.data?.error || 'Failed to update campaign');
     } finally {
       setLoading(false);
     }
   };
+
+  if (fetching) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-gray-500 text-lg">Loading campaign...</div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -46,8 +83,8 @@ export function CreateCampaignPage() {
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div className="px-8 py-6 border-b border-gray-200">
-              <h1 className="text-3xl font-semibold text-gray-900">Create New Campaign</h1>
-              <p className="mt-2 text-sm text-gray-600">Fill in the details to create a new coupon campaign</p>
+              <h1 className="text-3xl font-semibold text-gray-900">Edit Campaign</h1>
+              <p className="mt-2 text-sm text-gray-600">Update your campaign details</p>
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6">
@@ -127,7 +164,7 @@ export function CreateCampaignPage() {
                   disabled={loading}
                   className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm"
                 >
-                  {loading ? 'Creating...' : 'Create Campaign'}
+                  {loading ? 'Updating...' : 'Update Campaign'}
                 </button>
                 <button
                   type="button"

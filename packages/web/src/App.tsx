@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { CampaignDetailPage } from './pages/CampaignDetailPage';
 import { CreateCampaignPage } from './pages/CreateCampaignPage';
+import { EditCampaignPage } from './pages/EditCampaignPage';
 import { ScannerPage } from './pages/ScannerPage';
 
 function AppRoutes() {
@@ -29,6 +30,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute adminOnly>
             <CreateCampaignPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/campaigns/:id/edit"
+        element={
+          <ProtectedRoute adminOnly>
+            <EditCampaignPage />
           </ProtectedRoute>
         }
       />

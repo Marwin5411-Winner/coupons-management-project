@@ -33,72 +33,95 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full mx-4">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          {isRegister ? 'Register' : 'Login'}
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 px-4">
+      <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-md overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
+          <h1 className="text-3xl font-bold text-white text-center">
+            Coupon Management
+          </h1>
+          <p className="text-blue-100 text-center mt-2 text-sm">
+            {isRegister ? 'Create your account' : 'Sign in to your account'}
+          </p>
+        </div>
 
-        {error && (
-          <div className="bg-red-100 text-red-800 p-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {isRegister && (
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+        {/* Form */}
+        <div className="px-8 py-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+              {error}
             </div>
           )}
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {isRegister && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                  required
+                  placeholder="Enter your full name"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                required
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                required
+                minLength={6}
+                placeholder="Enter your password (min 6 characters)"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-3 rounded-lg font-medium transition-colors shadow-sm mt-6"
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => {
+                setIsRegister(!isRegister);
+                setError('');
+              }}
+              className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
+            >
+              {isRegister
+                ? 'Already have an account? Sign in'
+                : "Don't have an account? Create one"}
+            </button>
           </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-              minLength={6}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-3 py-2 rounded text-base font-medium cursor-pointer mt-2 hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
-          >
-            {loading ? 'Loading...' : isRegister ? 'Register' : 'Login'}
-          </button>
-        </form>
-
-        <button
-          onClick={() => setIsRegister(!isRegister)}
-          className="bg-transparent text-blue-500 border-none px-3 py-2 cursor-pointer text-sm mt-4 w-full hover:text-blue-600 transition-colors"
-        >
-          {isRegister
-            ? 'Already have an account? Login'
-            : "Don't have an account? Register"}
-        </button>
+        </div>
       </div>
     </div>
   );
