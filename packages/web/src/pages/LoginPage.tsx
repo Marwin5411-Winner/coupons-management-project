@@ -33,46 +33,50 @@ export function LoginPage() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>
+    <div className="min-h-screen w-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full mx-4">
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
           {isRegister ? 'Register' : 'Login'}
         </h1>
 
-        {error && <div style={styles.error}>{error}</div>}
+        {error && (
+          <div className="bg-red-100 text-red-800 p-3 rounded mb-4">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {isRegister && (
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Name</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                style={styles.input}
+                className="px-3 py-2 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
           )}
 
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Email</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={styles.input}
+              className="px-3 py-2 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Password</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={styles.input}
+              className="px-3 py-2 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
               minLength={6}
             />
@@ -80,7 +84,7 @@ export function LoginPage() {
 
           <button
             type="submit"
-            style={styles.submitBtn}
+            className="bg-blue-500 text-white px-3 py-2 rounded text-base font-medium cursor-pointer mt-2 hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? 'Loading...' : isRegister ? 'Register' : 'Login'}
@@ -89,7 +93,7 @@ export function LoginPage() {
 
         <button
           onClick={() => setIsRegister(!isRegister)}
-          style={styles.toggleBtn}
+          className="bg-transparent text-blue-500 border-none px-3 py-2 cursor-pointer text-sm mt-4 w-full hover:text-blue-600 transition-colors"
         >
           {isRegister
             ? 'Already have an account? Login'
@@ -99,77 +103,3 @@ export function LoginPage() {
     </div>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f3f4f6',
-  },
-  card: {
-    backgroundColor: 'white',
-    padding: '2rem',
-    borderRadius: '0.5rem',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    width: '100%',
-    maxWidth: '400px',
-  },
-  title: {
-    fontSize: '2rem',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: '1.5rem',
-    color: '#1f2937',
-  },
-  error: {
-    backgroundColor: '#fee2e2',
-    color: '#991b1b',
-    padding: '0.75rem',
-    borderRadius: '0.25rem',
-    marginBottom: '1rem',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-  },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-  },
-  label: {
-    fontSize: '0.9rem',
-    fontWeight: '500',
-    color: '#374151',
-  },
-  input: {
-    padding: '0.75rem',
-    border: '1px solid #d1d5db',
-    borderRadius: '0.25rem',
-    fontSize: '1rem',
-  },
-  submitBtn: {
-    backgroundColor: '#3b82f6',
-    color: 'white',
-    padding: '0.75rem',
-    border: 'none',
-    borderRadius: '0.25rem',
-    fontSize: '1rem',
-    fontWeight: '500',
-    cursor: 'pointer',
-    marginTop: '0.5rem',
-  },
-  toggleBtn: {
-    backgroundColor: 'transparent',
-    color: '#3b82f6',
-    border: 'none',
-    padding: '0.75rem',
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-    marginTop: '1rem',
-    width: '100%',
-  },
-};

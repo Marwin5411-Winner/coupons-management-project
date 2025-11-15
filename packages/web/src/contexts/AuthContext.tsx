@@ -28,9 +28,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
 
+    // Clear invalid values
+    if (storedUser === 'undefined' || storedUser === 'null') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return;
+    }
+
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      try {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        // Invalid JSON in localStorage, clear it
+        console.error('Failed to parse user from localStorage:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
   }, []);
 
