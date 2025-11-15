@@ -1,0 +1,13 @@
+{
+  "name": "my-coupon-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/api",
+    "packages/web",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev": "bun --cwd packages/api dev & bun --cwd packages/web dev",
+    "db:migrate": "bun --cwd packages/api run prisma migrate dev"
+  }
+}
