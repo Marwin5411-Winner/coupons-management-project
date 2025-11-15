@@ -1,0 +1,6 @@
+{
+  "version": "6.19.0",
+  "steps": {
+    "last_migration": "20241115000000_init"
+  }
+}

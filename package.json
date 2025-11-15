@@ -8,6 +8,14 @@
   ],
   "scripts": {
     "dev": "bun --cwd packages/api dev & bun --cwd packages/web dev",
-    "db:migrate": "bun --cwd packages/api run prisma migrate dev"
+    "dev:api": "bun --cwd packages/api dev",
+    "dev:web": "bun --cwd packages/web dev",
+    "db:start": "docker-compose up -d",
+    "db:stop": "docker-compose down",
+    "db:migrate": "bun --cwd packages/api db:migrate",
+    "db:seed": "bun --cwd packages/api db:seed",
+    "db:setup": "docker-compose up -d && sleep 3 && bun --cwd packages/api db:setup",
+    "build:api": "bun --cwd packages/api build",
+    "build:web": "bun --cwd packages/web build"
   }
 }
