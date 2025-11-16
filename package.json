@@ -4,7 +4,8 @@
   "workspaces": [
     "packages/api",
     "packages/web",
-    "packages/shared"
+    "packages/shared",
+    "packages/client-web"
   ],
   "scripts": {
     "dev": "bun --cwd packages/api dev & bun --cwd packages/web dev",
