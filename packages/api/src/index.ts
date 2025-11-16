@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 3000;
 const app = new Elysia()
   .use(cors({
     origin: [
+      'https://coupons-admin.demo.nexmindit.com',
+      'https://coupons-staff.demo.nexmindit.com',
       'http://coupons-admin.demo.nexmindit.com',
       'http://coupons-staff.demo.nexmindit.com',
       'http://localhost:5173', // Keep for local development
