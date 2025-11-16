@@ -2,8 +2,9 @@ module.exports = {
   apps: [{
     name: 'coupon-api',
     cwd: './packages/api',
-    script: 'bun',
-    args: 'run src/index.ts',
+    script: 'src/index.ts',
+    interpreter: '/root/.bun/bin/bun',
+    interpreter_args: 'run',
     instances: 1,
     autorestart: true,
     watch: false,
