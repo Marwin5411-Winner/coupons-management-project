@@ -20,19 +20,19 @@ export async function generateCouponPDF(coupons: CouponWithCampaign[]): Promise<
       }
 
       // Header
-      doc.fontSize(24).font("Helvetica-Bold").text("COUPON", { align: "center" });
+      doc.fontSize(24).font("fonts/Kanit-Bold.ttf").text("COUPON", { align: "center" });
       doc.moveDown();
 
       // Campaign info
-      doc.fontSize(16).font("Helvetica").text(coupon.campaign.name, { align: "center" });
+      doc.fontSize(16).font("fonts/Kanit-Regular.ttf").text(coupon.campaign.name, { align: "center" });
       if (coupon.campaign.description) {
-        doc.fontSize(12).text(coupon.campaign.description, { align: "center" });
+        doc.fontSize(12).font("fonts/Kanit-Regular.ttf").text(coupon.campaign.description, { align: "center" });
       }
       doc.moveDown(2);
 
       // Coupon code
-      doc.fontSize(14).font("Helvetica-Bold").text("Coupon Code:", { align: "center" });
-      doc.fontSize(18).font("Courier-Bold").text(coupon.code, { align: "center" });
+      doc.fontSize(14).font("fonts/Kanit-Bold.ttf").text("Coupon Code:", { align: "center" });
+      doc.fontSize(18).font("fonts/Kanit-Bold.ttf").text(coupon.code, { align: "center" });
       doc.moveDown(2);
 
       // QR Code
@@ -48,7 +48,7 @@ export async function generateCouponPDF(coupons: CouponWithCampaign[]): Promise<
       }
 
       // Footer
-      doc.fontSize(10).font("Helvetica").text(
+      doc.fontSize(10).font("fonts/Kanit-Regular.ttf").text(
         `Valid from ${new Date(coupon.campaign.startDate).toLocaleDateString()} to ${new Date(
           coupon.campaign.endDate
         ).toLocaleDateString()}`,
