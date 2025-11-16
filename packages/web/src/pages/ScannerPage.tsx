@@ -17,6 +17,7 @@ export function ScannerPage() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const isInitialized = useRef(false);
   const countdownTimerRef = useRef<number | null>(null);
+  const isProcessing = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -88,6 +89,12 @@ export function ScannerPage() {
   };
 
   const onScanSuccess = async (decodedText: string) => {
+    // Prevent multiple scans while processing
+    if (isProcessing.current) {
+      return;
+    }
+
+    isProcessing.current = true;
     await stopScanning();
     await validateAndRedeem(decodedText);
   };
@@ -136,6 +143,7 @@ export function ScannerPage() {
     }
     setResult(null);
     setCountdown(5);
+    isProcessing.current = false; // Reset processing flag
     // Optionally auto-restart scanner
     if (!isScanning) {
       startScanning();
@@ -148,6 +156,7 @@ export function ScannerPage() {
     }
     setResult(null);
     setCountdown(5);
+    isProcessing.current = false; // Reset processing flag
   };
 
   return (

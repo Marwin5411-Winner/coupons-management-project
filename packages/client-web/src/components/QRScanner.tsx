@@ -20,6 +20,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
   const [result, setResult] = useState<ScanResult | null>(null);
   const [countdown, setCountdown] = useState(5);
   const countdownTimerRef = useRef<number | null>(null);
+  const isProcessing = useRef(false);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -98,12 +99,18 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
     if (result && result[0]?.rawValue) {
       const scannedData = result[0].rawValue;
 
+      // Prevent multiple scans while processing
+      if (isProcessing.current) {
+        return;
+      }
+
       // Prevent duplicate scans
       if (scannedData === lastScan) {
         return;
       }
 
       setLastScan(scannedData);
+      isProcessing.current = true;
 
       // Stop scanning and validate
       setIsScanning(false);
@@ -130,6 +137,8 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
     }
     setResult(null);
     setCountdown(5);
+    setLastScan(''); // Clear last scan to allow scanning the same code again
+    isProcessing.current = false; // Reset processing flag
     // Auto-restart scanner
     setIsScanning(true);
   };
@@ -140,6 +149,8 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
     }
     setResult(null);
     setCountdown(5);
+    setLastScan(''); // Clear last scan
+    isProcessing.current = false; // Reset processing flag
   };
 
   return (
