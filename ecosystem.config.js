@@ -5,6 +5,7 @@ module.exports = {
     script: 'src/index.ts',
     interpreter: '/root/.bun/bin/bun',
     interpreter_args: 'run',
+    exec_mode: 'fork',
     instances: 1,
     autorestart: true,
     watch: false,
