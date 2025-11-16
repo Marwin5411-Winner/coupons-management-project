@@ -10,7 +10,14 @@ import { dashboardRoutes } from "./routes/dashboard";
 const PORT = process.env.PORT || 3000;
 
 const app = new Elysia()
-  .use(cors())
+  .use(cors({
+    origin: [
+      'http://coupons-admin.demo.nexmindit.com',
+      'http://coupons-staff.demo.nexmindit.com',
+      'http://localhost:5173', // Keep for local development
+    ],
+    credentials: true
+  }))
   .get("/", () => ({
     message: "Coupon Management API",
     version: "1.0.0",

@@ -8,7 +8,7 @@
     "packages/client-web"
   ],
   "scripts": {
-    "dev": "bun --cwd packages/api dev & bun --cwd packages/web dev",
+    "dev": "bun --cwd packages/api dev & bun --cwd packages/web dev & bun --cwd packages/client-web dev",
     "dev:api": "bun --cwd packages/api dev",
     "dev:web": "bun --cwd packages/web dev",
     "db:start": "docker-compose up -d",
@@ -17,6 +17,7 @@
     "db:seed": "bun --cwd packages/api db:seed",
     "db:setup": "docker-compose up -d && sleep 3 && bun --cwd packages/api db:setup",
     "build:api": "bun --cwd packages/api build",
-    "build:web": "bun --cwd packages/web build"
+    "build:web": "bun --cwd packages/web build",
+    "build:client-web": "bun --cwd packages/client-web build"
   }
 }
