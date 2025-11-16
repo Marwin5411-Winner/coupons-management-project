@@ -16,7 +16,7 @@ export function ScannerPage() {
   const [countdown, setCountdown] = useState(5);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const isInitialized = useRef(false);
-  const countdownTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {

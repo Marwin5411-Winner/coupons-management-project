@@ -10,7 +10,7 @@ import { EditCampaignPage } from './pages/EditCampaignPage';
 import { ScannerPage } from './pages/ScannerPage';
 
 function AppRoutes() {
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <Routes>
