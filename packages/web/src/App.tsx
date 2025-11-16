@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
+import { SimpleDashboard } from './pages/SimpleDashboard';
 import { DashboardPage } from './pages/DashboardPage';
 import { CampaignDetailPage } from './pages/CampaignDetailPage';
 import { CreateCampaignPage } from './pages/CreateCampaignPage';
@@ -20,8 +21,8 @@ function AppRoutes() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute adminOnly>
-            <DashboardPage />
+          <ProtectedRoute>
+            <SimpleDashboard />
           </ProtectedRoute>
         }
       />
@@ -69,7 +70,7 @@ function AppRoutes() {
         path="/"
         element={
           isAuthenticated ? (
-            <Navigate to={isAdmin ? "/dashboard" : "/scanner"} replace />
+            <Navigate to="/dashboard" replace />
           ) : (
             <Navigate to="/login" replace />
           )

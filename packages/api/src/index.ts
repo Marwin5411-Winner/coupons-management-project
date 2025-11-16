@@ -5,6 +5,7 @@ import { authRoutes } from "./routes/auth";
 import { campaignRoutes } from "./routes/campaigns";
 import { couponRoutes } from "./routes/coupons";
 import { redemptionRoutes } from "./routes/redemption";
+import { dashboardRoutes } from "./routes/dashboard";
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,6 +19,7 @@ const app = new Elysia()
       campaigns: "/campaigns",
       coupons: "/coupons",
       redemption: "/redemption",
+      dashboard: "/dashboard",
     },
   }))
   .get("/health", () => ({ status: "ok", timestamp: new Date().toISOString() }))
@@ -25,6 +27,7 @@ const app = new Elysia()
   .use(campaignRoutes)
   .use(couponRoutes)
   .use(redemptionRoutes)
+  .use(dashboardRoutes)
   .onError(({ code, error, set }) => {
     console.error("Error:", code, error);
     set.status = 500;
