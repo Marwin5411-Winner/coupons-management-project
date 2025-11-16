@@ -2,9 +2,7 @@ import QRScanner from './components/QRScanner'
 
 function App() {
   const handleScanSuccess = (data: string) => {
-    console.log('Scanned coupon data:', data);
-    // Here you can add logic to validate the coupon
-    // For example, make an API call to verify the coupon
+    console.log('Scanned coupon code:', data);
   };
 
   const handleScanError = (error: string) => {
