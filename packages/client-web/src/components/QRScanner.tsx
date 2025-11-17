@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import api from '../lib/api';
 
@@ -14,6 +15,7 @@ interface QRScannerProps {
 }
 
 export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps) {
+  const { t } = useTranslation();
   const [isScanning, setIsScanning] = useState(true);
   const [lastScan, setLastScan] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -119,12 +121,12 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
   }, [lastScan]);
 
   const handleError = useCallback((error: any) => {
-    const errorMessage = error?.message || 'Failed to access camera';
+    const errorMessage = error?.message || t('scanner.errors.cameraFailed');
     setError(errorMessage);
     if (onScanError) {
       onScanError(errorMessage);
     }
-  }, [onScanError]);
+  }, [onScanError, t]);
 
   const toggleScanning = () => {
     setIsScanning(!isScanning);
@@ -159,10 +161,10 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-3xl font-light text-gray-900 mb-2">
-            Scan Coupon
+            {t('scanner.title')}
           </h1>
           <p className="text-sm text-gray-500">
-            Position QR code in camera view
+            {t('scanner.subtitle')}
           </p>
         </div>
 
@@ -201,7 +203,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                   <div className="w-16 h-16 mx-auto mb-4 border-2 border-gray-300 rounded-lg flex items-center justify-center">
                     <div className="w-8 h-8 border border-gray-400"></div>
                   </div>
-                  <p className="text-gray-500 text-sm">Camera paused</p>
+                  <p className="text-gray-500 text-sm">{t('scanner.errors.cameraPaused')}</p>
                 </div>
               </div>
             )}
@@ -218,7 +220,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                     : 'bg-gray-900 text-white hover:bg-black'
                 }`}
               >
-                {isScanning ? 'Pause' : 'Start'}
+                {isScanning ? t('scanner.pauseButton') : t('scanner.startButton')}
               </button>
             </div>
           </div>
@@ -246,7 +248,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                 <h3 className={`text-xl font-bold ${
                   result.success ? 'text-green-800' : 'text-red-800'
                 }`}>
-                  {result.success ? 'Redemption Successful!' : 'Redemption Failed'}
+                  {result.success ? t('scanner.modal.success') : t('scanner.modal.failed')}
                 </h3>
                 <button
                   onClick={handleCloseModal}
@@ -291,11 +293,11 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                   <div className="bg-gray-50 rounded-lg p-5 mb-6 border border-gray-200">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-700">Coupon Code:</span>
+                        <span className="font-semibold text-gray-700">{t('scanner.modal.couponCode')}</span>
                         <span className="font-mono text-lg font-bold text-gray-900">{result.coupon.code}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-700">Status:</span>
+                        <span className="font-semibold text-gray-700">{t('scanner.modal.status')}</span>
                         <span className={`px-3 py-1 rounded-full text-sm font-bold ${
                           result.coupon.status === 'AVAILABLE'
                             ? 'bg-green-100 text-green-800'
@@ -303,12 +305,12 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                             ? 'bg-red-100 text-red-800'
                             : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {result.coupon.status}
+                          {result.coupon.status === 'AVAILABLE' ? t('scanner.status.available') : result.coupon.status === 'USED' ? t('scanner.status.used') : t('scanner.status.expired')}
                         </span>
                       </div>
                       {result.coupon.campaign && (
                         <div className="flex justify-between items-center">
-                          <span className="font-semibold text-gray-700">Campaign:</span>
+                          <span className="font-semibold text-gray-700">{t('scanner.modal.campaign')}</span>
                           <span className="text-gray-900">{result.coupon.campaign.name}</span>
                         </div>
                       )}
@@ -318,7 +320,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
 
                 {result.success && (
                   <p className="text-sm text-gray-600 mb-4">
-                    Auto-closing in {countdown} second{countdown !== 1 ? 's' : ''}...
+                    {t('scanner.modal.autoClosing', { count: countdown })}
                   </p>
                 )}
               </div>
@@ -337,7 +339,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    Next QR Code
+                    {t('scanner.modal.nextQR')}
                   </div>
                 </button>
                 {!result.success && (
@@ -345,7 +347,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                     onClick={handleCloseModal}
                     className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                   >
-                    Close
+                    {t('scanner.modal.close')}
                   </button>
                 )}
               </div>

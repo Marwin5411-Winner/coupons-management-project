@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { Navbar } from '../components/Navbar';
 
@@ -16,6 +17,7 @@ interface Campaign {
 }
 
 export function DashboardPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,7 +95,7 @@ export function DashboardPage() {
       <>
         <Navbar />
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-500 text-lg">Loading campaigns...</div>
+          <div className="text-gray-500 text-lg">{t('common.loading')}</div>
         </div>
       </>
     );
@@ -107,9 +109,9 @@ export function DashboardPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Campaigns</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('campaigns.title')}</h1>
               <p className="mt-1 text-sm text-gray-600">
-                Manage your coupon campaigns
+                {t('campaigns.subtitle')}
               </p>
             </div>
             <Link
@@ -119,7 +121,7 @@ export function DashboardPage() {
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Create Campaign
+              {t('campaigns.createButton')}
             </Link>
           </div>
 
@@ -127,14 +129,14 @@ export function DashboardPage() {
           {selectedCampaigns.size > 0 && (
             <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg px-6 py-4 flex items-center justify-between">
               <span className="text-sm font-medium text-blue-900">
-                {selectedCampaigns.size} campaign(s) selected
+                {t('campaigns.selectedCount', { count: selectedCampaigns.size })}
               </span>
               <button
                 onClick={handleBulkDelete}
                 disabled={bulkDeleting}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg font-medium transition-colors text-sm"
               >
-                {bulkDeleting ? 'Deleting...' : 'Delete Selected'}
+                {bulkDeleting ? 'Deleting...' : t('campaigns.deleteSelected')}
               </button>
             </div>
           )}
@@ -155,15 +157,15 @@ export function DashboardPage() {
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">No campaigns yet</h3>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">{t('campaigns.empty.title')}</h3>
               <p className="mt-2 text-sm text-gray-600">
-                Get started by creating your first campaign.
+                {t('campaigns.empty.subtitle')}
               </p>
               <Link
                 to="/campaigns/new"
                 className="mt-6 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
               >
-                Create Campaign
+                {t('campaigns.createButton')}
               </Link>
             </div>
           ) : (
@@ -177,7 +179,7 @@ export function DashboardPage() {
                   className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                 />
                 <label className="ml-2 text-sm text-gray-700 font-medium">
-                  Select All
+                  {t('campaigns.selectAll')}
                 </label>
               </div>
 
@@ -210,7 +212,7 @@ export function DashboardPage() {
                           </h3>
                           {expired && (
                             <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 mt-1">
-                              Expired
+                              {t('campaigns.expired')}
                             </span>
                           )}
                         </div>
@@ -227,7 +229,7 @@ export function DashboardPage() {
                         {/* Progress Bar */}
                         <div>
                           <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-700 font-medium">Coupons Generated</span>
+                            <span className="text-gray-700 font-medium">{t('campaigns.couponsGenerated')}</span>
                             <span className="text-gray-600">
                               {campaign._count.coupons} / {campaign.totalLimit}
                             </span>
@@ -263,7 +265,7 @@ export function DashboardPage() {
                           onClick={() => navigate(`/campaigns/${campaign.id}`)}
                           className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-sm"
                         >
-                          View Details
+                          {t('campaigns.viewDetails')}
                         </button>
                         <button
                           onClick={() => navigate(`/campaigns/${campaign.id}/edit`)}

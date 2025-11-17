@@ -1,0 +1,148 @@
+{
+  "common": {
+    "brand": "ระบบจัดการคูปอง",
+    "logout": "ออกจากระบบ",
+    "admin": "(ผู้ดูแลระบบ)",
+    "staff": "(พนักงาน)",
+    "cancel": "ยกเลิก",
+    "close": "ปิด",
+    "back": "กลับสู่หน้าหลัก",
+    "loading": "กำลังโหลด..."
+  },
+  "nav": {
+    "dashboard": "หน้าหลัก",
+    "campaigns": "แคมเปญ",
+    "scanner": "สแกนคูปอง"
+  },
+  "auth": {
+    "signin": "เข้าสู่ระบบบัญชีของคุณ",
+    "signup": "สร้างบัญชีของคุณ",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "fullName": "ชื่อ-นามสกุล",
+    "signInButton": "เข้าสู่ระบบ",
+    "signUpButton": "สร้างบัญชี",
+    "processing": "กำลังดำเนินการ...",
+    "alreadyHaveAccount": "มีบัญชีอยู่แล้ว?",
+    "signInLink": "เข้าสู่ระบบ",
+    "noAccount": "ยังไม่มีบัญชี?",
+    "createAccountLink": "สร้างบัญชี",
+    "passwordHint": "กรุณากรอกรหัสผ่าน (อย่างน้อย 6 ตัวอักษร)"
+  },
+  "dashboard": {
+    "welcome": "ยินดีต้อนรับกลับมา, {{name}}!",
+    "stats": {
+      "totalCoupons": "คูปองทั้งหมด",
+      "usedCoupons": "คูปองที่ใช้แล้ว",
+      "activeCampaigns": "แคมเปญที่ใช้งานอยู่"
+    },
+    "sections": {
+      "couponUsage": "การใช้งานคูปอง",
+      "quickActions": "เมนูด่วน",
+      "overview": "ภาพรวมหน้าหลัก"
+    },
+    "actions": {
+      "scanCoupon": "สแกนคูปอง",
+      "scanCouponDesc": "สแกน QR Code เพื่อตรวจสอบคูปอง",
+      "manageCampaigns": "จัดการแคมเปญ",
+      "manageCampaignsDesc": "ดูและแก้ไขแคมเปญ",
+      "newCampaign": "สร้างแคมเปญใหม่",
+      "newCampaignDesc": "สร้างแคมเปญคูปองใหม่"
+    }
+  },
+  "campaigns": {
+    "title": "แคมเปญ",
+    "subtitle": "จัดการแคมเปญคูปองของคุณ",
+    "createButton": "สร้างแคมเปญ",
+    "selectedCount": "เลือก {{count}} แคมเปญ",
+    "deleteSelected": "ลบที่เลือก",
+    "expired": "หมดอายุ",
+    "couponsGenerated": "คูปองที่สร้างแล้ว",
+    "selectAll": "เลือกทั้งหมด",
+    "empty": {
+      "title": "ยังไม่มีแคมเปญ",
+      "subtitle": "เริ่มต้นโดยการสร้างแคมเปญแรกของคุณ"
+    },
+    "viewDetails": "ดูรายละเอียด"
+  },
+  "createCampaign": {
+    "title": "สร้างแคมเปญใหม่",
+    "subtitle": "กรอกรายละเอียดเพื่อสร้างแคมเปญคูปองใหม่",
+    "form": {
+      "name": "ชื่อแคมเปญ",
+      "namePlaceholder": "กรอกชื่อแคมเปญ",
+      "description": "รายละเอียด",
+      "descriptionPlaceholder": "กรอกรายละเอียดแคมเปญ (ถ้ามี)",
+      "totalLimit": "จำนวนคูปองทั้งหมด",
+      "totalLimitPlaceholder": "กรอกจำนวนคูปองทั้งหมด",
+      "startDate": "วันที่เริ่มต้น",
+      "endDate": "วันที่สิ้นสุด"
+    },
+    "createButton": "สร้างแคมเปญ",
+    "creating": "กำลังสร้าง..."
+  },
+  "editCampaign": {
+    "title": "แก้ไขแคมเปญ",
+    "subtitle": "อัปเดตรายละเอียดแคมเปญของคุณ",
+    "updateButton": "อัปเดตแคมเปญ",
+    "updating": "กำลังอัปเดต..."
+  },
+  "campaignDetail": {
+    "title": "รายละเอียดแคมเปญ",
+    "sections": {
+      "generate": "สร้างคูปอง",
+      "export": "ส่งออกคูปอง",
+      "manual": "กรอกรหัสด้วยตนเอง"
+    },
+    "stats": {
+      "totalLimit": "จำนวนทั้งหมด",
+      "generated": "สร้างแล้ว",
+      "remaining": "เหลืออยู่",
+      "available": "ใช้งานได้",
+      "used": "ใช้แล้ว"
+    },
+    "status": {
+      "available": "ใช้งานได้",
+      "used": "ใช้แล้ว",
+      "expired": "หมดอายุ"
+    },
+    "buttons": {
+      "generate": "สร้าง",
+      "generating": "กำลังสร้าง...",
+      "exportAll": "ส่งออกทั้งหมดเป็น PDF",
+      "exporting": "กำลังส่งออก...",
+      "markAvailable": "ทำเครื่องหมายว่าใช้งานได้",
+      "markExpired": "ทำเครื่องหมายว่าหมดอายุ",
+      "deleteSelected": "ลบที่เลือก",
+      "deleting": "กำลังลบ..."
+    },
+    "filters": {
+      "all": "ทั้งหมด",
+      "available": "ใช้งานได้",
+      "used": "ใช้แล้ว",
+      "expired": "หมดอายุ"
+    },
+    "selectedCount": "เลือก {{count}} คูปอง",
+    "empty": "ไม่พบคูปอง สร้างคูปองเพื่อเริ่มต้น!",
+    "coupons": "คูปอง"
+  },
+  "scanner": {
+    "title": "สแกน QR Code",
+    "startCamera": "เปิดกล้อง",
+    "stopCamera": "ปิดกล้อง",
+    "or": "หรือ",
+    "manualEntry": "กรอกรหัสด้วยตนเอง",
+    "validate": "ตรวจสอบ",
+    "placeholder": "กรอกรหัสคูปอง",
+    "cameraError": "ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบสิทธิ์การเข้าถึงกล้อง",
+    "modal": {
+      "success": "ใช้คูปองสำเร็จ!",
+      "failed": "ใช้คูปองไม่สำเร็จ",
+      "couponCode": "รหัสคูปอง:",
+      "status": "สถานะ:",
+      "campaign": "แคมเปญ:",
+      "nextQR": "สแกน QR ถัดไป",
+      "autoClosing": "ปิดอัตโนมัติใน {{count}} วินาที..."
+    }
+  }
+}

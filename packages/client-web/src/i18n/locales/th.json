@@ -1,0 +1,41 @@
+{
+  "auth": {
+    "title": "เข้าสู่ระบบพนักงาน",
+    "subtitle": "เข้าสู่ระบบเพื่อสแกนและใช้คูปอง",
+    "email": "อีเมล",
+    "emailPlaceholder": "your@email.com",
+    "password": "รหัสผ่าน",
+    "passwordPlaceholder": "••••••",
+    "loginButton": "เข้าสู่ระบบ",
+    "loggingIn": "กำลังเข้าสู่ระบบ...",
+    "loginFailed": "เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจสอบอีเมลและรหัสผ่าน"
+  },
+  "scanner": {
+    "title": "สแกนคูปอง",
+    "subtitle": "วางคิวอาร์โค้ดในมุมมองกล้อง",
+    "pauseButton": "หยุดชั่วคราว",
+    "startButton": "เริ่ม",
+    "modal": {
+      "success": "ใช้คูปองสำเร็จ!",
+      "failed": "ใช้คูปองไม่สำเร็จ",
+      "couponCode": "รหัสคูปอง:",
+      "status": "สถานะ:",
+      "campaign": "แคมเปญ:",
+      "nextQR": "สแกน QR ถัดไป",
+      "close": "ปิด",
+      "autoClosing": "ปิดอัตโนมัติใน {{count}} วินาที..."
+    },
+    "status": {
+      "available": "ใช้งานได้",
+      "used": "ใช้แล้ว",
+      "expired": "หมดอายุ"
+    },
+    "errors": {
+      "cameraFailed": "ไม่สามารถเข้าถึงกล้องได้",
+      "cameraPaused": "กล้องหยุดชั่วคราว"
+    }
+  },
+  "common": {
+    "logout": "ออกจากระบบ"
+  }
+}

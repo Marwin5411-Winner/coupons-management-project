@@ -1,7 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function Navbar() {
+  const { t } = useTranslation();
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -15,7 +18,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="text-white text-xl font-bold hover:text-gray-200 transition-colors">
-            Coupon Management
+            {t('common.brand')}
           </Link>
 
           <div className="flex gap-6">
@@ -25,13 +28,13 @@ export function Navbar() {
                   to="/dashboard"
                   className="text-gray-300 hover:text-white transition-colors font-medium"
                 >
-                  Dashboard
+                  {t('nav.dashboard')}
                 </Link>
                 <Link
                   to="/campaigns"
                   className="text-gray-300 hover:text-white transition-colors font-medium"
                 >
-                  Campaigns
+                  {t('nav.campaigns')}
                 </Link>
               </>
             )}
@@ -39,19 +42,20 @@ export function Navbar() {
               to="/scanner"
               className="text-gray-300 hover:text-white transition-colors font-medium"
             >
-              Scanner
+              {t('nav.scanner')}
             </Link>
           </div>
 
           <div className="flex items-center gap-4">
+            <LanguageSwitcher />
             <span className="text-gray-300 text-sm">
-              {user?.name} <span className="text-gray-400">({user?.role})</span>
+              {user?.name} <span className="text-gray-400">({user?.role === 'ADMIN' ? t('common.admin') : t('common.staff')})</span>
             </span>
             <button
               onClick={handleLogout}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
             >
-              Logout
+              {t('common.logout')}
             </button>
           </div>
         </div>

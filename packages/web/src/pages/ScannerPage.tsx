@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { Navbar } from '../components/Navbar';
 
@@ -10,6 +11,7 @@ interface ScanResult {
 }
 
 export function ScannerPage() {
+  const { t } = useTranslation();
   const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<ScanResult | null>(null);
   const [manualCode, setManualCode] = useState('');
@@ -73,7 +75,7 @@ export function ScannerPage() {
       setResult(null);
     } catch (err) {
       console.error('Error starting scanner:', err);
-      alert('Failed to start camera. Please ensure camera permissions are granted.');
+      alert(t('scanner.cameraError'));
     }
   };
 
@@ -165,7 +167,7 @@ export function ScannerPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
-            QR Code Scanner
+            {t('scanner.title')}
           </h1>
 
           {/* Scanner Section */}
@@ -182,7 +184,7 @@ export function ScannerPage() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
-                    Start Camera
+                    {t('scanner.startCamera')}
                   </button>
                 ) : (
                   <button
@@ -193,7 +195,7 @@ export function ScannerPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                     </svg>
-                    Stop Camera
+                    {t('scanner.stopCamera')}
                   </button>
                 )}
               </div>
@@ -206,28 +208,28 @@ export function ScannerPage() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-gray-50 px-4 text-gray-600 font-medium">OR</span>
+              <span className="bg-gray-50 px-4 text-gray-600 font-medium">{t('scanner.or')}</span>
             </div>
           </div>
 
           {/* Manual Entry */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Enter Code Manually
+              {t('scanner.manualEntry')}
             </h3>
             <form onSubmit={handleManualSubmit} className="flex gap-3">
               <input
                 type="text"
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
-                placeholder="Enter coupon code"
+                placeholder={t('scanner.placeholder')}
                 className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button
                 type="submit"
                 className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
               >
-                Validate
+                {t('scanner.validate')}
               </button>
             </form>
           </div>
@@ -248,7 +250,7 @@ export function ScannerPage() {
                 <h3 className={`text-xl font-bold ${
                   result.success ? 'text-green-800' : 'text-red-800'
                 }`}>
-                  {result.success ? 'Redemption Successful!' : 'Redemption Failed'}
+                  {result.success ? t('scanner.modal.success') : t('scanner.modal.failed')}
                 </h3>
                 <button
                   onClick={handleCloseModal}
@@ -293,11 +295,11 @@ export function ScannerPage() {
                   <div className="bg-gray-50 rounded-lg p-5 mb-6 border border-gray-200">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-700">Coupon Code:</span>
+                        <span className="font-semibold text-gray-700">{t('scanner.modal.couponCode')}</span>
                         <span className="font-mono text-lg font-bold text-gray-900">{result.coupon.code}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-700">Status:</span>
+                        <span className="font-semibold text-gray-700">{t('scanner.modal.status')}</span>
                         <span className={`px-3 py-1 rounded-full text-sm font-bold ${
                           result.coupon.status === 'AVAILABLE'
                             ? 'bg-green-100 text-green-800'
@@ -305,12 +307,12 @@ export function ScannerPage() {
                             ? 'bg-red-100 text-red-800'
                             : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {result.coupon.status}
+                          {t(`campaignDetail.status.${result.coupon.status.toLowerCase()}`)}
                         </span>
                       </div>
                       {result.coupon.campaign && (
                         <div className="flex justify-between items-center">
-                          <span className="font-semibold text-gray-700">Campaign:</span>
+                          <span className="font-semibold text-gray-700">{t('scanner.modal.campaign')}</span>
                           <span className="text-gray-900">{result.coupon.campaign.name}</span>
                         </div>
                       )}
@@ -320,7 +322,7 @@ export function ScannerPage() {
 
                 {result.success && (
                   <p className="text-sm text-gray-600 mb-4">
-                    Auto-closing in {countdown} second{countdown !== 1 ? 's' : ''}...
+                    {t('scanner.modal.autoClosing', { count: countdown })}
                   </p>
                 )}
               </div>
@@ -339,7 +341,7 @@ export function ScannerPage() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    Next QR Code
+                    {t('scanner.modal.nextQR')}
                   </div>
                 </button>
                 {!result.success && (
@@ -347,7 +349,7 @@ export function ScannerPage() {
                     onClick={handleCloseModal}
                     className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                   >
-                    Close
+                    {t('common.close')}
                   </button>
                 )}
               </div>

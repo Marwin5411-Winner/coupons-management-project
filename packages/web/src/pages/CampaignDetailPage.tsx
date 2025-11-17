@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { Navbar } from '../components/Navbar';
 
@@ -22,6 +23,7 @@ interface Campaign {
 }
 
 export function CampaignDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState<Campaign | null>(null);
@@ -187,7 +189,7 @@ export function CampaignDetailPage() {
       <>
         <Navbar />
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-500 text-lg">Loading campaign...</div>
+          <div className="text-gray-500 text-lg">{t('common.loading')}</div>
         </div>
       </>
     );
@@ -223,7 +225,7 @@ export function CampaignDetailPage() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Dashboard
+            {t('common.back')}
           </button>
 
           {/* Campaign Info */}
@@ -256,23 +258,23 @@ export function CampaignDetailPage() {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-gray-900">{campaign.totalLimit}</div>
-                <div className="text-sm text-gray-600 mt-1">Total Limit</div>
+                <div className="text-sm text-gray-600 mt-1">{t('campaignDetail.stats.totalLimit')}</div>
               </div>
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-gray-900">{campaign.coupons.length}</div>
-                <div className="text-sm text-gray-600 mt-1">Generated</div>
+                <div className="text-sm text-gray-600 mt-1">{t('campaignDetail.stats.generated')}</div>
               </div>
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-gray-900">{remaining}</div>
-                <div className="text-sm text-gray-600 mt-1">Remaining</div>
+                <div className="text-sm text-gray-600 mt-1">{t('campaignDetail.stats.remaining')}</div>
               </div>
               <div className="bg-green-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-green-700">{availableCount}</div>
-                <div className="text-sm text-green-600 mt-1">Available</div>
+                <div className="text-sm text-green-600 mt-1">{t('campaignDetail.stats.available')}</div>
               </div>
               <div className="bg-red-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-red-700">{usedCount}</div>
-                <div className="text-sm text-red-600 mt-1">Used</div>
+                <div className="text-sm text-red-600 mt-1">{t('campaignDetail.stats.used')}</div>
               </div>
             </div>
           </div>
@@ -281,7 +283,7 @@ export function CampaignDetailPage() {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Generate Coupons */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Generate Coupons</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('campaignDetail.sections.generate')}</h3>
               <div className="flex gap-3">
                 <input
                   type="number"
@@ -297,7 +299,7 @@ export function CampaignDetailPage() {
                   disabled={generating || remaining === 0}
                   className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium transition-colors"
                 >
-                  {generating ? 'Generating...' : 'Generate'}
+                  {generating ? t('campaignDetail.buttons.generating') : t('campaignDetail.buttons.generate')}
                 </button>
               </div>
               {remaining === 0 && (
@@ -309,7 +311,7 @@ export function CampaignDetailPage() {
 
             {/* Export PDF */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Export Coupons</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('campaignDetail.sections.export')}</h3>
               <button
                 onClick={handleExportPDF}
                 disabled={exporting || campaign.coupons.length === 0}
@@ -318,7 +320,7 @@ export function CampaignDetailPage() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                {exporting ? 'Exporting...' : 'Export All to PDF'}
+                {exporting ? t('campaignDetail.buttons.exporting') : t('campaignDetail.buttons.exportAll')}
               </button>
             </div>
           </div>
@@ -328,7 +330,7 @@ export function CampaignDetailPage() {
             <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg px-6 py-4">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <span className="text-sm font-medium text-blue-900">
-                  {selectedCoupons.size} coupon(s) selected
+                  {t('campaignDetail.selectedCount', { count: selectedCoupons.size })}
                 </span>
                 <div className="flex gap-2 flex-wrap">
                   <button
@@ -336,21 +338,21 @@ export function CampaignDetailPage() {
                     disabled={bulkUpdating}
                     className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg font-medium transition-colors text-sm"
                   >
-                    Mark Available
+                    {t('campaignDetail.buttons.markAvailable')}
                   </button>
                   <button
                     onClick={() => handleBulkUpdateStatus('EXPIRED')}
                     disabled={bulkUpdating}
                     className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 disabled:bg-yellow-400 text-white rounded-lg font-medium transition-colors text-sm"
                   >
-                    Mark Expired
+                    {t('campaignDetail.buttons.markExpired')}
                   </button>
                   <button
                     onClick={handleBulkDelete}
                     disabled={bulkDeleting}
                     className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg font-medium transition-colors text-sm"
                   >
-                    {bulkDeleting ? 'Deleting...' : 'Delete Selected'}
+                    {bulkDeleting ? t('campaignDetail.buttons.deleting') : t('campaignDetail.buttons.deleteSelected')}
                   </button>
                 </div>
               </div>
@@ -361,7 +363,7 @@ export function CampaignDetailPage() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <h3 className="text-lg font-semibold text-gray-900">
-                Coupons ({filteredCoupons.length})
+                {t('campaignDetail.coupons')} ({filteredCoupons.length})
               </h3>
 
               {/* Filter */}
@@ -375,17 +377,17 @@ export function CampaignDetailPage() {
                   }}
                   className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="ALL">All ({campaign.coupons.length})</option>
-                  <option value="AVAILABLE">Available ({availableCount})</option>
-                  <option value="USED">Used ({usedCount})</option>
-                  <option value="EXPIRED">Expired ({expiredCount})</option>
+                  <option value="ALL">{t('campaignDetail.filters.all')} ({campaign.coupons.length})</option>
+                  <option value="AVAILABLE">{t('campaignDetail.filters.available')} ({availableCount})</option>
+                  <option value="USED">{t('campaignDetail.filters.used')} ({usedCount})</option>
+                  <option value="EXPIRED">{t('campaignDetail.filters.expired')} ({expiredCount})</option>
                 </select>
               </div>
             </div>
 
             {filteredCoupons.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-500">
-                No coupons found. Generate some to get started!
+                {t('campaignDetail.empty')}
               </div>
             ) : (
               <>
@@ -398,7 +400,7 @@ export function CampaignDetailPage() {
                     className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                   />
                   <label className="ml-2 text-sm text-gray-700 font-medium">
-                    Select All
+                    {t('campaigns.selectAll')}
                   </label>
                 </div>
 
@@ -425,7 +427,7 @@ export function CampaignDetailPage() {
                             {coupon.code}
                           </div>
                           <span className={`inline-block mt-2 px-2 py-1 rounded text-xs font-medium ${getStatusBadgeClass(coupon.status)}`}>
-                            {coupon.status}
+                            {t(`campaignDetail.status.${coupon.status.toLowerCase()}`)}
                           </span>
                         </div>
                       </div>

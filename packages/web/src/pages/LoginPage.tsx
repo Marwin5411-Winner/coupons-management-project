@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 export function LoginPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegister, setIsRegister] = useState(false);
@@ -33,15 +36,18 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 px-4 relative">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
           <h1 className="text-3xl font-bold text-white text-center">
-            Coupon Management
+            {t('common.brand')}
           </h1>
           <p className="text-blue-100 text-center mt-2 text-sm">
-            {isRegister ? 'Create your account' : 'Sign in to your account'}
+            {isRegister ? t('auth.signup') : t('auth.signin')}
           </p>
         </div>
 
@@ -57,7 +63,7 @@ export function LoginPage() {
             {isRegister && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name <span className="text-red-500">*</span>
+                  {t('auth.fullName')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -65,14 +71,14 @@ export function LoginPage() {
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                   required
-                  placeholder="Enter your full name"
+                  placeholder={t('auth.fullName')}
                 />
               </div>
             )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address <span className="text-red-500">*</span>
+                {t('auth.email')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -80,13 +86,13 @@ export function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                 required
-                placeholder="Enter your email"
+                placeholder={t('auth.email')}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password <span className="text-red-500">*</span>
+                {t('auth.password')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -95,7 +101,7 @@ export function LoginPage() {
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                 required
                 minLength={6}
-                placeholder="Enter your password (min 6 characters)"
+                placeholder={t('auth.passwordHint')}
               />
             </div>
 
@@ -104,7 +110,7 @@ export function LoginPage() {
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-3 rounded-lg font-medium transition-colors shadow-sm mt-6"
               disabled={loading}
             >
-              {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Sign In'}
+              {loading ? t('auth.processing') : isRegister ? t('auth.signUpButton') : t('auth.signInButton')}
             </button>
           </form>
 
@@ -117,8 +123,8 @@ export function LoginPage() {
               className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
             >
               {isRegister
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Create one"}
+                ? `${t('auth.alreadyHaveAccount')} ${t('auth.signInLink')}`
+                : `${t('auth.noAccount')} ${t('auth.createAccountLink')}`}
             </button>
           </div>
         </div>
