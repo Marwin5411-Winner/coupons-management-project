@@ -1,0 +1,148 @@
+{
+  "common": {
+    "brand": "Coupon Management",
+    "logout": "Logout",
+    "admin": "(ADMIN)",
+    "staff": "(STAFF)",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back to Dashboard",
+    "loading": "Loading..."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "campaigns": "Campaigns",
+    "scanner": "Scanner"
+  },
+  "auth": {
+    "signin": "Sign in to your account",
+    "signup": "Create your account",
+    "email": "Email Address",
+    "password": "Password",
+    "fullName": "Full Name",
+    "signInButton": "Sign In",
+    "signUpButton": "Create Account",
+    "processing": "Processing...",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "noAccount": "Don't have an account?",
+    "createAccountLink": "Create one",
+    "passwordHint": "Enter your password (min 6 characters)"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}!",
+    "stats": {
+      "totalCoupons": "Total Coupons",
+      "usedCoupons": "Used Coupons",
+      "activeCampaigns": "Active Campaigns"
+    },
+    "sections": {
+      "couponUsage": "Coupon Usage",
+      "quickActions": "Quick Actions",
+      "overview": "Dashboard Overview"
+    },
+    "actions": {
+      "scanCoupon": "Scan Coupon",
+      "scanCouponDesc": "Scan QR codes to verify coupons",
+      "manageCampaigns": "Manage Campaigns",
+      "manageCampaignsDesc": "View and edit campaigns",
+      "newCampaign": "New Campaign",
+      "newCampaignDesc": "Create a new coupon campaign"
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Manage your coupon campaigns",
+    "createButton": "Create Campaign",
+    "selectedCount": "{{count}} campaign(s) selected",
+    "deleteSelected": "Delete Selected",
+    "expired": "Expired",
+    "couponsGenerated": "Coupons Generated",
+    "selectAll": "Select All",
+    "empty": {
+      "title": "No campaigns yet",
+      "subtitle": "Get started by creating your first campaign"
+    },
+    "viewDetails": "View Details"
+  },
+  "createCampaign": {
+    "title": "Create New Campaign",
+    "subtitle": "Fill in the details to create a new coupon campaign",
+    "form": {
+      "name": "Campaign Name",
+      "namePlaceholder": "Enter campaign name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter campaign description (optional)",
+      "totalLimit": "Total Coupon Limit",
+      "totalLimitPlaceholder": "Enter total coupon limit",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "createButton": "Create Campaign",
+    "creating": "Creating..."
+  },
+  "editCampaign": {
+    "title": "Edit Campaign",
+    "subtitle": "Update your campaign details",
+    "updateButton": "Update Campaign",
+    "updating": "Updating..."
+  },
+  "campaignDetail": {
+    "title": "Campaign Details",
+    "sections": {
+      "generate": "Generate Coupons",
+      "export": "Export Coupons",
+      "manual": "Enter Code Manually"
+    },
+    "stats": {
+      "totalLimit": "Total Limit",
+      "generated": "Generated",
+      "remaining": "Remaining",
+      "available": "Available",
+      "used": "Used"
+    },
+    "status": {
+      "available": "AVAILABLE",
+      "used": "USED",
+      "expired": "EXPIRED"
+    },
+    "buttons": {
+      "generate": "Generate",
+      "generating": "Generating...",
+      "exportAll": "Export All to PDF",
+      "exporting": "Exporting...",
+      "markAvailable": "Mark Available",
+      "markExpired": "Mark Expired",
+      "deleteSelected": "Delete Selected",
+      "deleting": "Deleting..."
+    },
+    "filters": {
+      "all": "All",
+      "available": "Available",
+      "used": "Used",
+      "expired": "Expired"
+    },
+    "selectedCount": "{{count}} coupon(s) selected",
+    "empty": "No coupons found. Generate some to get started!",
+    "coupons": "Coupons"
+  },
+  "scanner": {
+    "title": "QR Code Scanner",
+    "startCamera": "Start Camera",
+    "stopCamera": "Stop Camera",
+    "or": "OR",
+    "manualEntry": "Enter Code Manually",
+    "validate": "Validate",
+    "placeholder": "Enter coupon code",
+    "cameraError": "Failed to start camera. Please ensure camera permissions are granted.",
+    "modal": {
+      "success": "Redemption Successful!",
+      "failed": "Redemption Failed",
+      "couponCode": "Coupon Code:",
+      "status": "Status:",
+      "campaign": "Campaign:",
+      "nextQR": "Next QR Code",
+      "autoClosing": "Auto-closing in {{count}} second(s)..."
+    }
+  }
+}

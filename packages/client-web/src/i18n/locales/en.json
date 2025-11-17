@@ -1,0 +1,41 @@
+{
+  "auth": {
+    "title": "Staff Login",
+    "subtitle": "Sign in to scan and redeem coupons",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••",
+    "loginButton": "Sign In",
+    "loggingIn": "Signing In...",
+    "loginFailed": "Login failed. Please check your email and password."
+  },
+  "scanner": {
+    "title": "Scan Coupon",
+    "subtitle": "Position QR code in camera view",
+    "pauseButton": "Pause",
+    "startButton": "Start",
+    "modal": {
+      "success": "Redemption Successful!",
+      "failed": "Redemption Failed",
+      "couponCode": "Coupon Code:",
+      "status": "Status:",
+      "campaign": "Campaign:",
+      "nextQR": "Next QR Code",
+      "close": "Close",
+      "autoClosing": "Auto-closing in {{count}} second(s)..."
+    },
+    "status": {
+      "available": "AVAILABLE",
+      "used": "USED",
+      "expired": "EXPIRED"
+    },
+    "errors": {
+      "cameraFailed": "Failed to access camera",
+      "cameraPaused": "Camera paused"
+    }
+  },
+  "common": {
+    "logout": "Logout"
+  }
+}

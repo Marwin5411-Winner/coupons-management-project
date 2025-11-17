@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { Navbar } from '../components/Navbar';
 
 export function EditCampaignPage() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -60,7 +62,7 @@ export function EditCampaignPage() {
       <>
         <Navbar />
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-500 text-lg">Loading campaign...</div>
+          <div className="text-gray-500 text-lg">{t('common.loading')}</div>
         </div>
       </>
     );
@@ -78,19 +80,19 @@ export function EditCampaignPage() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Dashboard
+            {t('common.back')}
           </button>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div className="px-8 py-6 border-b border-gray-200">
-              <h1 className="text-3xl font-semibold text-gray-900">Edit Campaign</h1>
-              <p className="mt-2 text-sm text-gray-600">Update your campaign details</p>
+              <h1 className="text-3xl font-semibold text-gray-900">{t('editCampaign.title')}</h1>
+              <p className="mt-2 text-sm text-gray-600">{t('editCampaign.subtitle')}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Campaign Name <span className="text-red-500">*</span>
+                  {t('createCampaign.form.name')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -98,26 +100,26 @@ export function EditCampaignPage() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                   required
-                  placeholder="Enter campaign name"
+                  placeholder={t('createCampaign.form.namePlaceholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  {t('createCampaign.form.description')}
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow resize-none"
                   rows={4}
-                  placeholder="Enter campaign description (optional)"
+                  placeholder={t('createCampaign.form.descriptionPlaceholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Total Coupon Limit <span className="text-red-500">*</span>
+                  {t('createCampaign.form.totalLimit')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -126,14 +128,14 @@ export function EditCampaignPage() {
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                   min={1}
                   required
-                  placeholder="Enter total coupon limit"
+                  placeholder={t('createCampaign.form.totalLimitPlaceholder')}
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Start Date <span className="text-red-500">*</span>
+                    {t('createCampaign.form.startDate')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
@@ -146,7 +148,7 @@ export function EditCampaignPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    End Date <span className="text-red-500">*</span>
+                    {t('createCampaign.form.endDate')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
@@ -164,14 +166,14 @@ export function EditCampaignPage() {
                   disabled={loading}
                   className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm"
                 >
-                  {loading ? 'Updating...' : 'Update Campaign'}
+                  {loading ? t('editCampaign.updating') : t('editCampaign.updateButton')}
                 </button>
                 <button
                   type="button"
                   onClick={() => navigate('/dashboard')}
                   className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
               </div>
             </form>

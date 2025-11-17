@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Navbar } from '../components/Navbar';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
@@ -11,6 +12,7 @@ interface DashboardStats {
 }
 
 export function SimpleDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     totalCoupons: 0,
@@ -46,7 +48,7 @@ export function SimpleDashboard() {
       <>
         <Navbar />
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-500 text-lg">Loading dashboard...</div>
+          <div className="text-gray-500 text-lg">{t('common.loading')}</div>
         </div>
       </>
     );
@@ -65,7 +67,7 @@ export function SimpleDashboard() {
           {/* Welcome Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">
-              Welcome back, {user?.name || user?.email}!
+              {t('dashboard.welcome', { name: user?.name || user?.email })}
             </h1>
             <p className="mt-2 text-gray-600">
               Here's an overview of your coupon management system
@@ -78,7 +80,7 @@ export function SimpleDashboard() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Coupons</p>
+                  <p className="text-sm font-medium text-gray-600">{t('dashboard.stats.totalCoupons')}</p>
                   <p className="mt-2 text-3xl font-bold text-gray-900">
                     {stats.totalCoupons.toLocaleString()}
                   </p>
@@ -95,7 +97,7 @@ export function SimpleDashboard() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Used Coupons</p>
+                  <p className="text-sm font-medium text-gray-600">{t('dashboard.stats.usedCoupons')}</p>
                   <p className="mt-2 text-3xl font-bold text-gray-900">
                     {stats.usedCoupons.toLocaleString()}
                   </p>
@@ -112,7 +114,7 @@ export function SimpleDashboard() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Active Campaigns</p>
+                  <p className="text-sm font-medium text-gray-600">{t('dashboard.stats.activeCampaigns')}</p>
                   <p className="mt-2 text-3xl font-bold text-gray-900">
                     {stats.activeCampaigns}
                   </p>
@@ -128,7 +130,7 @@ export function SimpleDashboard() {
 
           {/* Usage Progress */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Coupon Usage</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('dashboard.sections.couponUsage')}</h2>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Overall Usage Rate</span>
@@ -156,7 +158,7 @@ export function SimpleDashboard() {
 
           {/* Quick Actions */}
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('dashboard.sections.quickActions')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Scanner Card */}
               <Link
@@ -170,8 +172,8 @@ export function SimpleDashboard() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Scan Coupon</h3>
-                    <p className="text-sm text-gray-600 mt-1">Scan QR codes to verify coupons</p>
+                    <h3 className="font-semibold text-gray-900">{t('dashboard.actions.scanCoupon')}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{t('dashboard.actions.scanCouponDesc')}</p>
                   </div>
                 </div>
               </Link>
@@ -189,8 +191,8 @@ export function SimpleDashboard() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">Manage Campaigns</h3>
-                      <p className="text-sm text-gray-600 mt-1">View and edit campaigns</p>
+                      <h3 className="font-semibold text-gray-900">{t('dashboard.actions.manageCampaigns')}</h3>
+                      <p className="text-sm text-gray-600 mt-1">{t('dashboard.actions.manageCampaignsDesc')}</p>
                     </div>
                   </div>
                 </Link>
@@ -209,8 +211,8 @@ export function SimpleDashboard() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">New Campaign</h3>
-                      <p className="text-sm text-gray-600 mt-1">Create a new coupon campaign</p>
+                      <h3 className="font-semibold text-gray-900">{t('dashboard.actions.newCampaign')}</h3>
+                      <p className="text-sm text-gray-600 mt-1">{t('dashboard.actions.newCampaignDesc')}</p>
                     </div>
                   </div>
                 </Link>
@@ -225,7 +227,7 @@ export function SimpleDashboard() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <h3 className="font-semibold text-blue-900">Dashboard Overview</h3>
+                <h3 className="font-semibold text-blue-900">{t('dashboard.sections.overview')}</h3>
                 <p className="text-sm text-blue-800 mt-1">
                   This dashboard provides a quick overview of your coupon management system.
                   {isAdmin
