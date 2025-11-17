@@ -7,6 +7,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    resolve: {
+      dedupe: ['react', 'react-dom', 'react-i18next', 'i18next'],
+    },
     server: {
       proxy: {
         '/api': {
