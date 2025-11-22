@@ -16,12 +16,76 @@ enum UserRole {
   STAFF
 }
 
-enum CouponStatus {
-  AVAILABLE
-  USED
-  EXPIRED
+enum WalletType {
+  FUEL
+  BOAT
 }
 
+// บริษัทลูกค้า B2B
+model Company {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  contactInfo String?  // ข้อมูลติดต่อ เช่น เบอร์โทร, อีเมล
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  wallets Wallet[]
+
+  @@map("companies")
+}
+
+// กระเป๋าเงิน/โควต้า สำหรับแต่ละบริษัท (แยกตาม type: FUEL, BOAT)
+model Wallet {
+  id        String     @id @default(uuid())
+  companyId String
+  company   Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type      WalletType // FUEL หรือ BOAT
+  balance   Float      @default(0) // ยอดคงเหลือ (ลิตรสำหรับ FUEL, เที่ยวสำหรับ BOAT)
+  qrToken   String     @unique // รหัสสำหรับ Gen QR Code (ไม่ซ้ำกัน)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  topupLogs  TopupLog[]
+  usageLogs  UsageLog[]
+
+  @@unique([companyId, type]) // 1 บริษัท มี 1 Wallet ต่อ 1 Type
+  @@index([companyId])
+  @@index([qrToken])
+  @@map("wallets")
+}
+
+// ประวัติการเติมยอด (ขาเข้า)
+model TopupLog {
+  id          String   @id @default(uuid())
+  walletId    String
+  wallet      Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  amountAdded Float    // จำนวนที่เติม (ลิตร หรือ เที่ยว)
+  adminId     String   // Admin ที่เติม
+  admin       User     @relation("AdminTopups", fields: [adminId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([walletId])
+  @@index([adminId])
+  @@map("topup_logs")
+}
+
+// ประวัติการใช้งาน (ขาออก)
+model UsageLog {
+  id              String   @id @default(uuid())
+  walletId        String
+  wallet          Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  amountDeducted  Float    // จำนวนที่ตัด (ลิตร หรือ เที่ยว)
+  durationMinutes Int?     // ระยะเวลาใช้งาน (นาที) - สำหรับเรือเท่านั้น
+  staffId         String   // พนักงานที่ทำรายการ
+  staff           User     @relation("StaffUsages", fields: [staffId], references: [id])
+  createdAt       DateTime @default(now())
+
+  @@index([walletId])
+  @@index([staffId])
+  @@map("usage_logs")
+}
+
+// ผู้ใช้งานระบบ (Admin/Staff)
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -31,53 +95,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  redemptions RedemptionLog[]
+  topups TopupLog[]  @relation("AdminTopups")
+  usages UsageLog[]  @relation("StaffUsages")
 
   @@map("users")
-}
-
-model Campaign {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  totalLimit  Int      // จำนวนคูปองทั้งหมดที่สร้างได้
-  startDate   DateTime
-  endDate     DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  coupons Coupon[]
-
-  @@map("campaigns")
-}
-
-model Coupon {
-  id         String       @id @default(uuid())
-  code       String       @unique // รหัสคูปองที่ไม่ซ้ำ
-  qrCode     String       @unique // QR Code data
-  status     CouponStatus @default(AVAILABLE)
-  campaignId String
-  campaign   Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-
-  redemptions RedemptionLog[]
-
-  @@index([campaignId])
-  @@index([code])
-  @@index([status])
-  @@map("coupons")
-}
-
-model RedemptionLog {
-  id         String   @id @default(uuid())
-  couponId   String
-  coupon     Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  redeemedAt DateTime @default(now())
-
-  @@index([couponId])
-  @@index([userId])
-  @@map("redemption_logs")
 }
