@@ -2,9 +2,10 @@ import "dotenv/config";
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { authRoutes } from "./routes/auth";
-import { campaignRoutes } from "./routes/campaigns";
-import { couponRoutes } from "./routes/coupons";
-import { redemptionRoutes } from "./routes/redemption";
+import { companyRoutes } from "./routes/companies";
+import { walletRoutes } from "./routes/wallets";
+import { topupRoutes } from "./routes/topup";
+import { usageRoutes } from "./routes/usage";
 import { dashboardRoutes } from "./routes/dashboard";
 
 const PORT = process.env.PORT || 3000;
@@ -16,26 +17,30 @@ const app = new Elysia()
       'https://coupons-staff.demo.nexmindit.com',
       'http://coupons-admin.demo.nexmindit.com',
       'http://coupons-staff.demo.nexmindit.com',
-      'http://localhost:5173', // Keep for local development
+      'http://localhost:5173', // Admin web
+      'http://localhost:5174', // Staff web
+      'http://localhost:5175', // Client web
     ],
     credentials: true
   }))
   .get("/", () => ({
-    message: "Coupon Management API",
-    version: "1.0.0",
+    message: "Fuel & Boat Coupon Management API",
+    version: "2.0.0",
     endpoints: {
       auth: "/auth",
-      campaigns: "/campaigns",
-      coupons: "/coupons",
-      redemption: "/redemption",
+      companies: "/companies",
+      wallets: "/wallets",
+      topup: "/topup",
+      usage: "/usage",
       dashboard: "/dashboard",
     },
   }))
   .get("/health", () => ({ status: "ok", timestamp: new Date().toISOString() }))
   .use(authRoutes)
-  .use(campaignRoutes)
-  .use(couponRoutes)
-  .use(redemptionRoutes)
+  .use(companyRoutes)
+  .use(walletRoutes)
+  .use(topupRoutes)
+  .use(usageRoutes)
   .use(dashboardRoutes)
   .onError(({ code, error, set }) => {
     console.error("Error:", code, error);
@@ -48,5 +53,5 @@ const app = new Elysia()
   .listen(PORT);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Fuel & Boat Coupon API is running at ${app.server?.hostname}:${app.server?.port}`
 );
