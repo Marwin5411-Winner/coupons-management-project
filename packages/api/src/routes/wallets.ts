@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../utils/auth";
+import { verifyToken } from "../lib/auth";
 import { randomBytes } from "crypto";
 import QRCode from "qrcode";
 

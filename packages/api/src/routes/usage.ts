@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../utils/auth";
+import { verifyToken } from "../lib/auth";
 
 export const usageRoutes = new Elysia({ prefix: "/usage" })
   // Get all usage logs

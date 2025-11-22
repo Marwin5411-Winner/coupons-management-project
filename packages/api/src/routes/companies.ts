@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../utils/auth";
+import { verifyToken } from "../lib/auth";
 
 export const companyRoutes = new Elysia({ prefix: "/companies" })
   // Get all companies
