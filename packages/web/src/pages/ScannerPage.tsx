@@ -101,32 +101,59 @@ export function ScannerPage() {
     await validateAndRedeem(decodedText);
   };
 
-  const validateAndRedeem = async (code: string) => {
+  const validateAndRedeem = async (qrToken: string) => {
     try {
-      // First validate
-      const validateRes = await api.post('/redemption/validate', { code });
+      // Get wallet info by QR token
+      const walletRes = await api.get(`/wallets/qr/${qrToken}`);
+      const wallet = walletRes.data;
+
+      // For now, use a simple default amount
+      // In production, you might want to show a modal to select amount
+      const defaultAmount = wallet.type === 'FUEL' ? 25 : 1;
+
+      // Validate first
+      const validateRes = await api.post('/usage/validate', {
+        qrToken,
+        amount: defaultAmount,
+      });
 
       if (!validateRes.data.valid) {
         setResult({
           success: false,
-          message: validateRes.data.message,
-          coupon: validateRes.data.coupon,
+          message: validateRes.data.error || 'ยอดคงเหลือไม่เพียงพอ',
+          coupon: {
+            code: qrToken.slice(0, 8) + '...',
+            status: 'INVALID',
+            campaign: {
+              name: `${wallet.company.name} - ${wallet.type === 'FUEL' ? '⛽ น้ำมัน' : '🚤 เรือ'}`,
+            },
+          },
         });
         return;
       }
 
       // If valid, redeem
-      const redeemRes = await api.post('/redemption/redeem', { code });
+      const redeemRes = await api.post('/usage/redeem', {
+        walletId: wallet.id,
+        amount: defaultAmount,
+        durationMinutes: wallet.type === 'BOAT' ? 60 : undefined, // Default 1 hour for boat
+      });
 
       setResult({
         success: redeemRes.data.success,
-        message: redeemRes.data.message,
-        coupon: redeemRes.data.coupon,
+        message: `ตัดยอดสำเร็จ: ${defaultAmount} ${wallet.type === 'FUEL' ? 'ลิตร' : 'เที่ยว'}\nยอดคงเหลือ: ${redeemRes.data.newBalance.toFixed(2)}`,
+        coupon: {
+          code: qrToken.slice(0, 8) + '...',
+          status: 'USED',
+          campaign: {
+            name: `${wallet.company.name} - ${wallet.type === 'FUEL' ? '⛽ น้ำมัน' : '🚤 เรือ'}`,
+          },
+        },
       });
     } catch (error: any) {
       setResult({
         success: false,
-        message: error.response?.data?.message || 'Failed to process coupon',
+        message: error.response?.data?.error || 'เกิดข้อผิดพลาด',
       });
     }
   };
