@@ -2,11 +2,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
-import { SimpleDashboard } from './pages/SimpleDashboard';
-import { DashboardPage } from './pages/DashboardPage';
-import { CampaignDetailPage } from './pages/CampaignDetailPage';
-import { CreateCampaignPage } from './pages/CreateCampaignPage';
-import { EditCampaignPage } from './pages/EditCampaignPage';
+import { NewDashboard } from './pages/NewDashboard';
+import { CompaniesPage } from './pages/CompaniesPage';
+import { FuelWalletsPage } from './pages/FuelWalletsPage';
+import { BoatWalletsPage } from './pages/BoatWalletsPage';
+import { ReportsPage } from './pages/ReportsPage';
 import { ScannerPage } from './pages/ScannerPage';
 
 function AppRoutes() {
@@ -22,39 +22,39 @@ function AppRoutes() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <SimpleDashboard />
+            <NewDashboard />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/campaigns"
+        path="/companies"
         element={
           <ProtectedRoute adminOnly>
-            <DashboardPage />
+            <CompaniesPage />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/campaigns/new"
+        path="/fuel-wallets"
         element={
           <ProtectedRoute adminOnly>
-            <CreateCampaignPage />
+            <FuelWalletsPage />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/campaigns/:id/edit"
+        path="/boat-wallets"
         element={
           <ProtectedRoute adminOnly>
-            <EditCampaignPage />
+            <BoatWalletsPage />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/campaigns/:id"
+        path="/reports"
         element={
           <ProtectedRoute adminOnly>
-            <CampaignDetailPage />
+            <ReportsPage />
           </ProtectedRoute>
         }
       />
