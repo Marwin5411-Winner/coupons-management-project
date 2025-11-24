@@ -1,12 +1,12 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 
 export const usageRoutes = new Elysia({ prefix: "/usage" })
   // Get all usage logs
   .get("/", async ({ headers, query, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -55,7 +55,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
     "/validate",
     async ({ headers, body, set }) => {
       try {
-        const user = await verifyToken(headers.authorization);
+        const user = await authenticateRequest(headers.authorization);
         if (!user) {
           set.status = 401;
           return { error: "Unauthorized" };
@@ -128,7 +128,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
     "/redeem",
     async ({ headers, body, set }) => {
       try {
-        const user = await verifyToken(headers.authorization);
+        const user = await authenticateRequest(headers.authorization);
         if (!user) {
           set.status = 401;
           return { error: "Unauthorized" };
@@ -178,7 +178,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
               walletId: body.walletId,
               amountDeducted: body.amount,
               durationMinutes: body.durationMinutes || null,
-              staffId: user.id,
+              staffId: user.userId,
             },
             include: {
               wallet: {
@@ -233,7 +233,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
   // Get usage history for a wallet
   .get("/wallet/:walletId", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -267,7 +267,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
   // Get usage history for staff (my redemptions)
   .get("/my-redemptions", async ({ headers, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -275,7 +275,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
 
       const usageLogs = await prisma.usageLog.findMany({
         where: {
-          staffId: user.id,
+          staffId: user.userId,
         },
         include: {
           wallet: {

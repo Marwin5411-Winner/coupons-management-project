@@ -1,12 +1,12 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 
 export const dashboardRoutes = new Elysia({ prefix: "/dashboard" })
   // Get overall statistics
   .get("/stats", async ({ headers, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -69,7 +69,7 @@ export const dashboardRoutes = new Elysia({ prefix: "/dashboard" })
   // Get Fuel Report
   .get("/reports/fuel", async ({ headers, query, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -134,7 +134,7 @@ export const dashboardRoutes = new Elysia({ prefix: "/dashboard" })
   // Get Boat Report
   .get("/reports/boat", async ({ headers, query, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };

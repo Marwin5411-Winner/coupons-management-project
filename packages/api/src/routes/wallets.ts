@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 import { randomBytes } from "crypto";
 import QRCode from "qrcode";
 
@@ -12,7 +12,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
   // Get all wallets
   .get("/", async ({ headers, query, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -50,7 +50,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
   // Get wallet by ID
   .get("/:id", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -96,7 +96,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
   // Get wallet by QR token (for scanning)
   .get("/qr/:qrToken", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -131,7 +131,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
     "/",
     async ({ headers, body, set }) => {
       try {
-        const user = await verifyToken(headers.authorization);
+        const user = await authenticateRequest(headers.authorization);
         if (!user || user.role !== "ADMIN") {
           set.status = 403;
           return { error: "Forbidden: Admin access required" };
@@ -191,7 +191,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
   // Generate QR Code for wallet (as data URL)
   .get("/:id/qrcode", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -231,7 +231,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
   // Delete wallet
   .delete("/:id", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user || user.role !== "ADMIN") {
         set.status = 403;
         return { error: "Forbidden: Admin access required" };

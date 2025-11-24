@@ -1,12 +1,12 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 
 export const companyRoutes = new Elysia({ prefix: "/companies" })
   // Get all companies
   .get("/", async ({ headers, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user || user.role !== "ADMIN") {
         set.status = 403;
         return { error: "Forbidden: Admin access required" };
@@ -36,7 +36,7 @@ export const companyRoutes = new Elysia({ prefix: "/companies" })
   // Get company by ID
   .get("/:id", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };
@@ -87,7 +87,7 @@ export const companyRoutes = new Elysia({ prefix: "/companies" })
     "/",
     async ({ headers, body, set }) => {
       try {
-        const user = await verifyToken(headers.authorization);
+        const user = await authenticateRequest(headers.authorization);
         if (!user || user.role !== "ADMIN") {
           set.status = 403;
           return { error: "Forbidden: Admin access required" };
@@ -119,7 +119,7 @@ export const companyRoutes = new Elysia({ prefix: "/companies" })
     "/:id",
     async ({ headers, params, body, set }) => {
       try {
-        const user = await verifyToken(headers.authorization);
+        const user = await authenticateRequest(headers.authorization);
         if (!user || user.role !== "ADMIN") {
           set.status = 403;
           return { error: "Forbidden: Admin access required" };
@@ -150,7 +150,7 @@ export const companyRoutes = new Elysia({ prefix: "/companies" })
   // Delete company
   .delete("/:id", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user || user.role !== "ADMIN") {
         set.status = 403;
         return { error: "Forbidden: Admin access required" };

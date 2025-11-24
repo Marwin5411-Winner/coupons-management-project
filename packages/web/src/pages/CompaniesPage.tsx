@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Navbar } from '../components/Navbar';
 import api from '../lib/api';
 
 interface Wallet {
@@ -19,7 +18,6 @@ interface Company {
 }
 
 export function CompaniesPage() {
-  const { user, logout } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -110,58 +108,7 @@ export function CompaniesPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <Link to="/dashboard" className="text-xl font-bold text-blue-600">
-                ⛽🚤 ระบบจัดการคูปอง
-              </Link>
-              <div className="hidden md:flex space-x-4">
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/companies"
-                  className="text-gray-900 font-medium hover:text-blue-600 px-3 py-2 rounded-md"
-                >
-                  บริษัท
-                </Link>
-                <Link
-                  to="/fuel-wallets"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                >
-                  คูปองน้ำมัน
-                </Link>
-                <Link
-                  to="/boat-wallets"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                >
-                  คูปองเรือ
-                </Link>
-                <Link
-                  to="/reports"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                >
-                  รายงาน
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">{user?.name}</span>
-              <button
-                onClick={logout}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
-                ออกจากระบบ
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

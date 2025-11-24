@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Navbar } from '../components/Navbar';
 import api from '../lib/api';
-import { useTranslation } from 'react-i18next';
 
 interface DashboardStats {
   totalCompanies: number;
@@ -16,8 +16,7 @@ interface DashboardStats {
 }
 
 export function NewDashboard() {
-  const { user, logout } = useAuth();
-  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -36,9 +35,7 @@ export function NewDashboard() {
     }
   };
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
+
 
   if (loading) {
     return (
@@ -51,84 +48,7 @@ export function NewDashboard() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-bold text-blue-600">
-                ⛽🚤 ระบบจัดการคูปอง
-              </h1>
-              <div className="hidden md:flex space-x-4">
-                <Link
-                  to="/dashboard"
-                  className="text-gray-900 font-medium hover:text-blue-600 px-3 py-2 rounded-md"
-                >
-                  Dashboard
-                </Link>
-                {user?.role === 'ADMIN' && (
-                  <>
-                    <Link
-                      to="/companies"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                    >
-                      บริษัท
-                    </Link>
-                    <Link
-                      to="/fuel-wallets"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                    >
-                      คูปองน้ำมัน
-                    </Link>
-                    <Link
-                      to="/boat-wallets"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                    >
-                      คูปองเรือ
-                    </Link>
-                    <Link
-                      to="/reports"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
-                    >
-                      รายงาน
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => changeLanguage('th')}
-                  className={`px-2 py-1 rounded ${
-                    i18n.language === 'th'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700'
-                  }`}
-                >
-                  TH
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={`px-2 py-1 rounded ${
-                    i18n.language === 'en'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-              <span className="text-gray-700">{user?.name}</span>
-              <button
-                onClick={logout}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
-                ออกจากระบบ
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -1,12 +1,12 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 
 export const topupRoutes = new Elysia({ prefix: "/topup" })
   // Get all topup logs
   .get("/", async ({ headers, query, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user || user.role !== "ADMIN") {
         set.status = 403;
         return { error: "Forbidden: Admin access required" };
@@ -55,7 +55,7 @@ export const topupRoutes = new Elysia({ prefix: "/topup" })
     "/",
     async ({ headers, body, set }) => {
       try {
-        const user = await verifyToken(headers.authorization);
+        const user = await authenticateRequest(headers.authorization);
         if (!user || user.role !== "ADMIN") {
           set.status = 403;
           return { error: "Forbidden: Admin access required" };
@@ -131,7 +131,7 @@ export const topupRoutes = new Elysia({ prefix: "/topup" })
   // Get topup history for a wallet
   .get("/wallet/:walletId", async ({ headers, params, set }) => {
     try {
-      const user = await verifyToken(headers.authorization);
+      const user = await authenticateRequest(headers.authorization);
       if (!user) {
         set.status = 401;
         return { error: "Unauthorized" };

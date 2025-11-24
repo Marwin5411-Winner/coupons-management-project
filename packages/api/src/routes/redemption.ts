@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
-import { verifyToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 
 export const redemptionRoutes = new Elysia({ prefix: "/redemption" })
   .post(
@@ -119,14 +119,7 @@ export const redemptionRoutes = new Elysia({ prefix: "/redemption" })
         const { code } = body;
 
         // Get user from token
-        const authorization = headers.authorization;
-        if (!authorization) {
-          set.status = 401;
-          return { error: "No token provided" };
-        }
-
-        const token = authorization.replace("Bearer ", "");
-        const decoded = verifyToken(token);
+        const decoded = await authenticateRequest(headers.authorization);
 
         if (!decoded) {
           set.status = 401;
@@ -237,14 +230,7 @@ export const redemptionRoutes = new Elysia({ prefix: "/redemption" })
   .get("/history", async ({ headers, query, set }) => {
     try {
       // Get user from token (optional for admins)
-      const authorization = headers.authorization;
-      if (!authorization) {
-        set.status = 401;
-        return { error: "No token provided" };
-      }
-
-      const token = authorization.replace("Bearer ", "");
-      const decoded = verifyToken(token);
+      const decoded = await authenticateRequest(headers.authorization);
 
       if (!decoded) {
         set.status = 401;

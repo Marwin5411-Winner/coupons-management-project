@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Navbar } from '../components/Navbar';
 import api from '../lib/api';
 
 interface TopupLog {
@@ -27,7 +26,6 @@ interface UsageLog {
 type TabType = 'fuel' | 'boat';
 
 export function ReportsPage() {
-  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('fuel');
   const [topups, setTopups] = useState<TopupLog[]>([]);
   const [usages, setUsages] = useState<UsageLog[]>([]);
@@ -76,28 +74,7 @@ export function ReportsPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <Link to="/dashboard" className="text-xl font-bold text-blue-600">
-                ⛽🚤 ระบบจัดการคูปอง
-              </Link>
-              <div className="hidden md:flex space-x-4">
-                <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">Dashboard</Link>
-                <Link to="/companies" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">บริษัท</Link>
-                <Link to="/fuel-wallets" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">คูปองน้ำมัน</Link>
-                <Link to="/boat-wallets" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">คูปองเรือ</Link>
-                <Link to="/reports" className="text-gray-900 font-medium hover:text-blue-600 px-3 py-2 rounded-md">รายงาน</Link>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">{user?.name}</span>
-              <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">ออกจากระบบ</button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -111,21 +88,19 @@ export function ReportsPage() {
           <div className="flex space-x-4 border-b">
             <button
               onClick={() => setActiveTab('fuel')}
-              className={`px-6 py-3 font-medium ${
-                activeTab === 'fuel'
+              className={`px-6 py-3 font-medium ${activeTab === 'fuel'
                   ? 'border-b-2 border-yellow-500 text-yellow-600'
                   : 'text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
               ⛽ น้ำมัน
             </button>
             <button
               onClick={() => setActiveTab('boat')}
-              className={`px-6 py-3 font-medium ${
-                activeTab === 'boat'
+              className={`px-6 py-3 font-medium ${activeTab === 'boat'
                   ? 'border-b-2 border-cyan-500 text-cyan-600'
                   : 'text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
               🚤 เรือ
             </button>

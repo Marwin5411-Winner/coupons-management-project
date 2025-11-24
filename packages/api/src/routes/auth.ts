@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
 import { hashPassword, verifyPassword, generateToken } from "../lib/auth";
+import { authenticateRequest } from "../utils/auth";
 
 export const authRoutes = new Elysia({ prefix: "/auth" })
   .post(
@@ -118,16 +119,7 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
   )
   .get("/me", async ({ headers, set }) => {
     try {
-      const authorization = headers.authorization;
-
-      if (!authorization) {
-        set.status = 401;
-        return { error: "No token provided" };
-      }
-
-      const token = authorization.replace("Bearer ", "");
-      const decoded = require("../lib/auth").verifyToken(token);
-
+      const decoded = await authenticateRequest(headers.authorization);
       if (!decoded) {
         set.status = 401;
         return { error: "Invalid token" };

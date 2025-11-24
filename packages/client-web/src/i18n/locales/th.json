@@ -11,13 +11,21 @@
     "loginFailed": "เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจสอบอีเมลและรหัสผ่าน"
   },
   "scanner": {
-    "title": "สแกนคูปอง",
+    "title": "สแกน QR Code",
     "subtitle": "วางคิวอาร์โค้ดในมุมมองกล้อง",
     "pauseButton": "หยุดชั่วคราว",
     "startButton": "เริ่ม",
+    "walletFound": "พบข้อมูล Wallet",
     "modal": {
-      "success": "ใช้คูปองสำเร็จ!",
-      "failed": "ใช้คูปองไม่สำเร็จ",
+      "success": "ทำรายการสำเร็จ!",
+      "failed": "ทำรายการไม่สำเร็จ",
+      "confirm": "ยืนยันการทำรายการ",
+      "company": "บริษัท:",
+      "type": "ประเภท:",
+      "balance": "ยอดคงเหลือ:",
+      "amountToDeduct": "จำนวนที่ต้องการตัด",
+      "cancel": "ยกเลิก",
+      "processing": "กำลังดำเนินการ...",
       "couponCode": "รหัสคูปอง:",
       "status": "สถานะ:",
       "campaign": "แคมเปญ:",
@@ -32,7 +40,8 @@
     },
     "errors": {
       "cameraFailed": "ไม่สามารถเข้าถึงกล้องได้",
-      "cameraPaused": "กล้องหยุดชั่วคราว"
+      "cameraPaused": "กล้องหยุดชั่วคราว",
+      "invalidAmount": "กรุณาระบุจำนวนที่ถูกต้อง"
     }
   },
   "common": {
