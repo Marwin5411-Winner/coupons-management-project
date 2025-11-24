@@ -115,10 +115,113 @@ export function BoatWalletsPage() {
 
   const handleDownloadQR = () => {
     if (!selectedWallet || !qrCodeDataURL) return;
-    const link = document.createElement('a');
-    link.href = qrCodeDataURL;
-    link.download = `QR_${selectedWallet.company.name}_BOAT.jpg`;
-    link.click();
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas dimensions
+    const width = 800;
+    const height = 1100;
+    canvas.width = width;
+    canvas.height = height;
+
+    // 1. Background (Light Blue Gradient)
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, '#00AEEF'); // Top blue
+    gradient.addColorStop(1, '#B3E5FC'); // Bottom light blue
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // 2. White Card with Rounded Corners
+    const cardX = 50;
+    const cardY = 150;
+    const cardWidth = width - 100;
+    const cardHeight = height - 300;
+    const borderRadius = 20;
+
+    ctx.beginPath();
+    ctx.moveTo(cardX + borderRadius, cardY);
+    ctx.lineTo(cardX + cardWidth - borderRadius, cardY);
+    ctx.quadraticCurveTo(cardX + cardWidth, cardY, cardX + cardWidth, cardY + borderRadius);
+    ctx.lineTo(cardX + cardWidth, cardY + cardHeight - borderRadius);
+    ctx.quadraticCurveTo(cardX + cardWidth, cardY + cardHeight, cardX + cardWidth - borderRadius, cardY + cardHeight);
+    ctx.lineTo(cardX + borderRadius, cardY + cardHeight);
+    ctx.quadraticCurveTo(cardX, cardY + cardHeight, cardX, cardY + cardHeight - borderRadius);
+    ctx.lineTo(cardX, cardY + borderRadius);
+    ctx.quadraticCurveTo(cardX, cardY, cardX + borderRadius, cardY);
+    ctx.closePath();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fill();
+    // Add subtle shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 10;
+
+    // Reset shadow for text/images
+    ctx.shadowColor = 'transparent';
+
+    // 3. Header Text
+    ctx.fillStyle = '#0056b3'; // Darker blue for text
+    ctx.font = 'bold 40px Sarabun, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${selectedWallet.company.name}`, width / 2, cardY + 80);
+
+    // Separator Line
+    ctx.beginPath();
+    ctx.moveTo(cardX, cardY + 120);
+    ctx.lineTo(cardX + cardWidth, cardY + 120);
+    ctx.strokeStyle = '#E0E0E0';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 4. QR Code
+    const qrImage = new Image();
+    qrImage.onload = () => {
+      const qrSize = 450;
+      const qrX = (width - qrSize) / 2;
+      const qrY = cardY + 160;
+      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+
+      // 5. Center Logo
+      const logoImage = new Image();
+      logoImage.onload = () => {
+        const logoSize = 100;
+        const logoX = (width - logoSize) / 2;
+        const logoY = qrY + (qrSize - logoSize) / 2;
+
+        // White background for logo
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(logoX - 5, logoY - 5, logoSize + 10, logoSize + 10);
+
+        ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+
+        // 6. Footer
+        // Separator Line for footer
+        ctx.beginPath();
+        ctx.moveTo(cardX, cardY + cardHeight - 100);
+        ctx.lineTo(cardX + cardWidth, cardY + cardHeight - 100);
+        ctx.strokeStyle = '#E0E0E0';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Footer Text
+        ctx.fillStyle = '#0056b3'; // Blue color
+        ctx.font = 'bold 30px Sarabun, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('คูปองเรือ', width / 2, cardY + cardHeight - 40);
+
+        // Trigger Download
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = `QR_${selectedWallet.company.name}_BOAT.jpg`;
+        link.click();
+      };
+      logoImage.src = '/logo.jpg';
+    };
+    qrImage.src = qrCodeDataURL;
   };
 
   const handleShowHistory = async (wallet: Wallet) => {
