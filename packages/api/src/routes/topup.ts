@@ -88,9 +88,13 @@ export const topupRoutes = new Elysia({ prefix: "/topup" })
           // Create topup log
           const topupLog = await tx.topupLog.create({
             data: {
-              walletId: body.walletId,
               amountAdded: body.amount,
-              adminId: user.id,
+              wallet: {
+                connect: { id: body.walletId },
+              },
+              admin: {
+                connect: { id: user.userId },
+              },
             },
             include: {
               wallet: {

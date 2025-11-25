@@ -79,7 +79,7 @@ export function NewDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Wallet น้ำมัน
+                  คูปองน้ำมัน
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {stats?.fuelWallets || 0}
@@ -96,7 +96,7 @@ export function NewDashboard() {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Wallet เรือ</p>
+                <p className="text-sm font-medium text-gray-600">คูปองเรือ</p>
                 <p className="text-3xl font-bold text-gray-900">
                   {stats?.boatWallets || 0}
                 </p>

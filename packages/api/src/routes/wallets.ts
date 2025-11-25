@@ -228,6 +228,76 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
     }
   })
 
+  // Update wallet
+  .put(
+    "/:id",
+    async ({ headers, params, body, set }) => {
+      try {
+        const user = await authenticateRequest(headers.authorization);
+        if (!user || user.role !== "ADMIN") {
+          set.status = 403;
+          return { error: "Forbidden: Admin access required" };
+        }
+
+        // Check if wallet exists
+        const existingWallet = await prisma.wallet.findUnique({
+          where: { id: params.id },
+        });
+
+        if (!existingWallet) {
+          set.status = 404;
+          return { error: "Wallet not found" };
+        }
+
+        // If changing company, check for duplicate
+        if (body.companyId && body.companyId !== existingWallet.companyId) {
+          const duplicateWallet = await prisma.wallet.findFirst({
+            where: {
+              companyId: body.companyId,
+              type: existingWallet.type,
+            },
+          });
+
+          if (duplicateWallet) {
+            set.status = 400;
+            return {
+              error: "A wallet of this type already exists for the selected company",
+            };
+          }
+        }
+
+        // Prepare update data
+        const updateData: any = {};
+        if (body.companyId) {
+          updateData.companyId = body.companyId;
+        }
+        if (body.balance !== undefined) {
+          updateData.balance = body.balance;
+        }
+
+        // Update wallet
+        const wallet = await prisma.wallet.update({
+          where: { id: params.id },
+          data: updateData,
+          include: {
+            company: true,
+          },
+        });
+
+        return wallet;
+      } catch (error: any) {
+        set.status = 500;
+        return { error: "Failed to update wallet", message: error.message };
+      }
+    },
+    {
+      body: t.Object({
+        companyId: t.Optional(t.String()),
+        balance: t.Optional(t.Number({ minimum: 0 })),
+      }),
+    }
+  )
+
   // Delete wallet
   .delete("/:id", async ({ headers, params, set }) => {
     try {

@@ -89,8 +89,8 @@ export function ReportsPage() {
             <button
               onClick={() => setActiveTab('fuel')}
               className={`px-6 py-3 font-medium ${activeTab === 'fuel'
-                  ? 'border-b-2 border-yellow-500 text-yellow-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                ? 'border-b-2 border-yellow-500 text-yellow-600'
+                : 'text-gray-500 hover:text-gray-700'
                 }`}
             >
               ⛽ น้ำมัน
@@ -98,8 +98,8 @@ export function ReportsPage() {
             <button
               onClick={() => setActiveTab('boat')}
               className={`px-6 py-3 font-medium ${activeTab === 'boat'
-                  ? 'border-b-2 border-cyan-500 text-cyan-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                ? 'border-b-2 border-cyan-500 text-cyan-600'
+                : 'text-gray-500 hover:text-gray-700'
                 }`}
             >
               🚤 เรือ
@@ -144,21 +144,21 @@ export function ReportsPage() {
         {/* Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="bg-green-50 rounded-lg p-6 border-l-4 border-green-500">
-            <p className="text-sm text-gray-600">รวมการเติม</p>
+            <p className="text-sm text-gray-600">{activeTab === 'fuel' ? 'ซื้อน้ำมันรวม' : 'ซื้อเที่ยวทั้งหมด'}</p>
             <p className="text-2xl font-bold text-green-600">
               +{totalTopup.toFixed(2)} {activeTab === 'fuel' ? 'ลิตร' : 'เที่ยว'}
             </p>
             <p className="text-sm text-gray-500 mt-1">{topups.length} รายการ</p>
           </div>
           <div className="bg-red-50 rounded-lg p-6 border-l-4 border-red-500">
-            <p className="text-sm text-gray-600">รวมการใช้</p>
+            <p className="text-sm text-gray-600">{activeTab === 'fuel' ? 'ใช้น้ำมันทั้งหมด' : 'ใช้เที่ยวทั้งหมด'}</p>
             <p className="text-2xl font-bold text-red-600">
               -{totalUsage.toFixed(2)} {activeTab === 'fuel' ? 'ลิตร' : 'เที่ยว'}
             </p>
             <p className="text-sm text-gray-500 mt-1">{usages.length} รายการ</p>
           </div>
           <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-blue-500">
-            <p className="text-sm text-gray-600">ส่วนต่าง</p>
+            <p className="text-sm text-gray-600">ส่วนที่เหลือ</p>
             <p className="text-2xl font-bold text-blue-600">
               {(totalTopup - totalUsage).toFixed(2)} {activeTab === 'fuel' ? 'ลิตร' : 'เที่ยว'}
             </p>

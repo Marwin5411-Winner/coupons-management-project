@@ -39,8 +39,11 @@ export function BoatWalletsPage() {
   const [showTopupModal, setShowTopupModal] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState('');
+  const [editCompanyId, setEditCompanyId] = useState('');
+  const [editBalance, setEditBalance] = useState('');
   const [initialBalance, setInitialBalance] = useState('');
   const [topupAmount, setTopupAmount] = useState('');
   const [qrCodeDataURL, setQrCodeDataURL] = useState('');
@@ -243,6 +246,32 @@ export function BoatWalletsPage() {
     return `${hours} ชม. ${mins} นาที`;
   };
 
+  const handleEditWallet = (wallet: Wallet) => {
+    setSelectedWallet(wallet);
+    setEditCompanyId(wallet.company.id);
+    setEditBalance(Math.floor(wallet.balance).toString());
+    setShowEditModal(true);
+  };
+
+  const handleUpdateWallet = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedWallet) return;
+
+    try {
+      await api.put(`/wallets/${selectedWallet.id}`, {
+        companyId: editCompanyId,
+        balance: parseInt(editBalance),
+      });
+      alert('อัพเดท Wallet สำเร็จ');
+      setShowEditModal(false);
+      setEditCompanyId('');
+      setEditBalance('');
+      fetchData();
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'เกิดข้อผิดพลาด');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -261,13 +290,13 @@ export function BoatWalletsPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">🚤 คูปองเรือ</h2>
-            <p className="mt-2 text-gray-600">จัดการ Wallet เรือ (หน่วย: เที่ยว)</p>
+            <p className="mt-2 text-gray-600">จัดการ คูปองเรือ (หน่วย: เที่ยว)</p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
             className="bg-cyan-600 text-white px-6 py-3 rounded-lg hover:bg-cyan-700 font-medium"
           >
-            + สร้าง Wallet ใหม่
+            + เพิ่มเที่ยวบริษัทใหม่
           </button>
         </div>
 
@@ -308,6 +337,12 @@ export function BoatWalletsPage() {
                 >
                   ประวัติ
                 </button>
+                <button
+                  onClick={() => handleEditWallet(wallet)}
+                  className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600"
+                >
+                  แก้ไข
+                </button>
               </div>
             </div>
           ))}
@@ -324,7 +359,7 @@ export function BoatWalletsPage() {
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-xl font-bold mb-4">สร้าง Wallet เรือใหม่</h3>
+            <h3 className="text-xl font-bold mb-4">เพิ่มเที่ยวบริษัทใหม่</h3>
             <form onSubmit={handleCreateWallet}>
               <div className="space-y-4">
                 <div>
@@ -451,6 +486,53 @@ export function BoatWalletsPage() {
             <div className="mt-6 flex justify-end">
               <button onClick={() => setShowHistoryModal(false)} className="px-6 py-2 bg-gray-300 text-gray-700 rounded">ปิด</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Wallet Modal */}
+      {showEditModal && selectedWallet && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 className="text-xl font-bold mb-4">แก้ไข Wallet เรือ</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              บริษัทปัจจุบัน: <span className="font-bold">{selectedWallet.company.name}</span><br />
+              ยอดปัจจุบัน: <span className="font-bold text-cyan-600">{Math.floor(selectedWallet.balance)} เที่ยว</span>
+            </p>
+            <form onSubmit={handleUpdateWallet}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">เลือกบริษัท</label>
+                  <select
+                    value={editCompanyId}
+                    onChange={(e) => setEditCompanyId(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="">-- เลือกบริษัท --</option>
+                    {companies.map((company) => (
+                      <option key={company.id} value={company.id}>{company.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">ยอดคงเหลือ (เที่ยว) *</label>
+                  <input
+                    type="number"
+                    step="1"
+                    required
+                    min="0"
+                    value={editBalance}
+                    onChange={(e) => setEditBalance(e.target.value)}
+                    placeholder="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end space-x-3">
+                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">ยกเลิก</button>
+                <button type="submit" className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">อัพเดท</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
