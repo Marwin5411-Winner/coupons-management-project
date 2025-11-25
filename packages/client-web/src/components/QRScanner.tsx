@@ -291,8 +291,8 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
               <button
                 onClick={toggleScanning}
                 className={`px-5 py-2 text-sm font-medium transition-colors ${isScanning
-                    ? 'bg-black text-white hover:bg-gray-800'
-                    : 'bg-gray-900 text-white hover:bg-black'
+                  ? 'bg-black text-white hover:bg-gray-800'
+                  : 'bg-gray-900 text-white hover:bg-black'
                   }`}
               >
                 {isScanning ? t('scanner.pauseButton') : t('scanner.startButton')}
@@ -379,8 +379,8 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                       <div className="flex justify-between items-center">
                         <span className="font-semibold text-gray-700">{t('scanner.modal.type')}</span>
                         <span className={`px-3 py-1 rounded-full text-sm font-bold ${result.wallet.type === 'FUEL'
-                            ? 'bg-orange-100 text-orange-800'
-                            : 'bg-blue-100 text-blue-800'
+                          ? 'bg-orange-100 text-orange-800'
+                          : 'bg-blue-100 text-blue-800'
                           }`}>
                           {result.wallet.type}
                         </span>
@@ -399,19 +399,39 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                     {/* Amount Input (Only if not success yet) */}
                     {!result.success && (
                       <div className="mt-6 pt-4 border-t border-gray-200">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-3">
                           {t('scanner.modal.amountToDeduct')} ({result.wallet.type === 'FUEL' ? 'Liters' : 'Trips'})
                         </label>
-                        <input
-                          type="number"
-                          value={amount}
-                          onChange={(e) => setAmount(e.target.value)}
-                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring-0 text-lg"
-                          placeholder="0.00"
-                          autoFocus
-                          min="0.01"
-                          step="0.01"
-                        />
+
+                        {result.wallet.type === 'FUEL' ? (
+                          // Fuel Selection Buttons
+                          <div className="grid grid-cols-2 gap-3">
+                            {[25, 50, 75, 100].map((liters) => (
+                              <button
+                                key={liters}
+                                onClick={() => setAmount(liters.toString())}
+                                className={`px-6 py-4 rounded-lg border-2 font-semibold text-lg transition-all ${amount === liters.toString()
+                                    ? 'border-orange-500 bg-orange-50 text-orange-700 shadow-md'
+                                    : 'border-gray-300 text-gray-700 hover:border-orange-300 hover:bg-orange-50'
+                                  }`}
+                              >
+                                {liters} ลิตร
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          // Regular Number Input for BOAT
+                          <input
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring-0 text-lg"
+                            placeholder="0.00"
+                            autoFocus
+                            min="0.01"
+                            step="0.01"
+                          />
+                        )}
                       </div>
                     )}
                   </div>
@@ -450,8 +470,8 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
                       onClick={handleRedeem}
                       disabled={isRedeeming || !amount || parseFloat(amount) <= 0}
                       className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all shadow-md text-white ${isRedeeming || !amount || parseFloat(amount) <= 0
-                          ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-blue-600 hover:bg-blue-700 transform hover:scale-105'
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-blue-600 hover:bg-blue-700 transform hover:scale-105'
                         }`}
                     >
                       {isRedeeming ? t('scanner.modal.processing') : t('scanner.modal.confirm')}

@@ -98,6 +98,16 @@ export const companyRoutes = new Elysia({ prefix: "/companies" })
             name: body.name,
             contactInfo: body.contactInfo || null,
           },
+          include: {
+            wallets: {
+              select: {
+                id: true,
+                type: true,
+                balance: true,
+                qrToken: true,
+              },
+            },
+          },
         });
 
         return company;
@@ -130,6 +140,16 @@ export const companyRoutes = new Elysia({ prefix: "/companies" })
           data: {
             name: body.name,
             contactInfo: body.contactInfo,
+          },
+          include: {
+            wallets: {
+              select: {
+                id: true,
+                type: true,
+                balance: true,
+                qrToken: true,
+              },
+            },
           },
         });
 

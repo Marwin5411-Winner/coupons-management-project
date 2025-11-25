@@ -93,7 +93,7 @@ export function BoatWalletsPage() {
         walletId: selectedWallet.id,
         amount: parseInt(topupAmount),
       });
-      alert('เติมยอดสำเร็จ');
+      alert('เติมเที่ยวสำเร็จ');
       setShowTopupModal(false);
       setTopupAmount('');
       fetchData();
@@ -294,7 +294,7 @@ export function BoatWalletsPage() {
                   }}
                   className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
                 >
-                  เติมยอด
+                  เติมเที่ยว
                 </button>
                 <button
                   onClick={() => handleShowQR(wallet)}
@@ -366,7 +366,7 @@ export function BoatWalletsPage() {
       {showTopupModal && selectedWallet && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-xl font-bold mb-4">เติมยอดเรือ</h3>
+            <h3 className="text-xl font-bold mb-4">เติมเที่ยวเรือ</h3>
             <p className="text-sm text-gray-600 mb-4">
               บริษัท: {selectedWallet.company.name}<br />
               ยอดปัจจุบัน: <span className="font-bold text-cyan-600">{Math.floor(selectedWallet.balance)} เที่ยว</span>
@@ -384,7 +384,7 @@ export function BoatWalletsPage() {
               />
               <div className="flex justify-end space-x-3">
                 <button type="button" onClick={() => setShowTopupModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">ยกเลิก</button>
-                <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">ยืนยันเติมยอด</button>
+                <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">ยืนยันเติมเที่ยวเรือ</button>
               </div>
             </form>
           </div>
@@ -415,7 +415,7 @@ export function BoatWalletsPage() {
             <h3 className="text-xl font-bold mb-4">ประวัติ - {selectedWallet.company.name}</h3>
 
             <div className="mb-6">
-              <h4 className="text-lg font-semibold text-green-600 mb-2">การเติมยอด ({topupHistory.length})</h4>
+              <h4 className="text-lg font-semibold text-green-600 mb-2">การเติมเที่ยว ({topupHistory.length})</h4>
               <div className="bg-gray-50 rounded p-4 max-h-48 overflow-y-auto">
                 {topupHistory.map((log) => (
                   <div key={log.id} className="flex justify-between py-2 border-b border-gray-200">

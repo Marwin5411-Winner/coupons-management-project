@@ -287,7 +287,7 @@ export function FuelWalletsPage() {
                   }}
                   className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
                 >
-                  เติมยอด
+                  เติมยอดน้ำมัน
                 </button>
                 <button
                   onClick={() => handleShowQR(wallet)}
@@ -335,7 +335,7 @@ export function FuelWalletsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">ยอดเริ่มต้น (ลิตร)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">ยอดทั้งหมดที่เขาเติมได้ (ลิตร)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -359,7 +359,7 @@ export function FuelWalletsPage() {
       {showTopupModal && selectedWallet && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-xl font-bold mb-4">เติมยอดน้ำมัน</h3>
+            <h3 className="text-xl font-bold mb-4">เพิ่มยอดน้ำมัน</h3>
             <p className="text-sm text-gray-600 mb-4">
               บริษัท: {selectedWallet.company.name}<br />
               ยอดปัจจุบัน: <span className="font-bold text-yellow-600">{selectedWallet.balance.toFixed(2)} ลิตร</span>
