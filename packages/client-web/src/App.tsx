@@ -1,7 +1,7 @@
 import { useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import QRScanner from './components/QRScanner';
-import { LanguageSwitcher } from './components/LanguageSwitcher';
+
 
 function App() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -22,7 +22,7 @@ function App() {
     <div className="relative">
       {/* Logout Button & Language Switcher */}
       <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
-        <LanguageSwitcher />
+
         <button
           onClick={logout}
           className="px-4 py-2 bg-gray-900 text-white text-sm rounded-lg hover:bg-black transition-colors flex items-center gap-2"

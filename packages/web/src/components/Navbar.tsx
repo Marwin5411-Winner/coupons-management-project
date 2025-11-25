@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LanguageSwitcher } from './LanguageSwitcher';
+
 
 export function Navbar() {
   const { user, logout, isAdmin } = useAuth();
@@ -72,9 +72,7 @@ export function Navbar() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="flex space-x-2">
-              <LanguageSwitcher />
-            </div>
+
             <span className="text-gray-700">{user?.name}</span>
             <button
               onClick={handleLogout}

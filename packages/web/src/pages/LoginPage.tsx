@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { LanguageSwitcher } from '../components/LanguageSwitcher';
+
 
 export function LoginPage() {
   const { t } = useTranslation();
@@ -37,9 +37,7 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 px-4 relative">
-      <div className="absolute top-4 right-4">
-        <LanguageSwitcher />
-      </div>
+
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">

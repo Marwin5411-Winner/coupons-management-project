@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { LanguageSwitcher } from '../components/LanguageSwitcher';
+
 
 export function LoginPage() {
   const { t } = useTranslation();
@@ -28,9 +28,7 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4 relative">
-      <div className="absolute top-4 right-4">
-        <LanguageSwitcher />
-      </div>
+
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="mb-12 text-center">
