@@ -209,10 +209,14 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
         return { error: "Wallet not found" };
       }
 
-      // Generate QR Code as data URL
-      const qrCodeDataURL = await QRCode.toDataURL(wallet.qrToken, {
+      // Import the helper function
+      const { generateQRCodeWithLogo } = await import('../utils/qrcode');
+      
+      // Generate QR Code with embedded logo
+      const qrCodeDataURL = await generateQRCodeWithLogo(wallet.qrToken, {
         width: 512,
         margin: 2,
+        logoSize: 100,
       });
 
       return {

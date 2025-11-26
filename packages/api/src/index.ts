@@ -7,6 +7,7 @@ import { walletRoutes } from "./routes/wallets";
 import { topupRoutes } from "./routes/topup";
 import { usageRoutes } from "./routes/usage";
 import { dashboardRoutes } from "./routes/dashboard";
+import { publicRoutes } from "./routes/public";
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,9 +34,11 @@ const app = new Elysia()
       topup: "/topup",
       usage: "/usage",
       dashboard: "/dashboard",
+      public: "/public (no auth)",
     },
   }))
   .get("/health", () => ({ status: "ok", timestamp: new Date().toISOString() }))
+  .use(publicRoutes)
   .use(authRoutes)
   .use(companyRoutes)
   .use(walletRoutes)

@@ -25,7 +25,7 @@ enum WalletType {
 model Company {
   id          String   @id @default(uuid())
   name        String   @unique
-  contactInfo String?  // ข้อมูลติดต่อ เช่น เบอร์โทร, อีเมล
+  contactInfo String? // ข้อมูลติดต่อ เช่น เบอร์โทร, อีเมล
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -36,21 +36,25 @@ model Company {
 
 // กระเป๋าเงิน/โควต้า สำหรับแต่ละบริษัท (แยกตาม type: FUEL, BOAT)
 model Wallet {
-  id        String     @id @default(uuid())
-  companyId String
-  company   Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  type      WalletType // FUEL หรือ BOAT
-  balance   Float      @default(0) // ยอดคงเหลือ (ลิตรสำหรับ FUEL, เที่ยวสำหรับ BOAT)
-  qrToken   String     @unique // รหัสสำหรับ Gen QR Code (ไม่ซ้ำกัน)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id                   String     @id @default(uuid())
+  companyId            String
+  company              Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type                 WalletType // FUEL หรือ BOAT
+  balance              Float      @default(0) // ยอดคงเหลือ (ลิตรสำหรับ FUEL, เที่ยวสำหรับ BOAT)
+  qrToken              String     @unique // รหัสสำหรับ Gen QR Code (ไม่ซ้ำกัน)
+  qrDisplayToken       String?    @unique // โทเค็นที่ใช้ใน QR Code (รีเซ็ตทุก 3 วัน)
+  qrDisplayTokenExpiry DateTime? // วันหมดอายุของ QR Display Token
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
 
-  topupLogs  TopupLog[]
-  usageLogs  UsageLog[]
+  topupLogs TopupLog[]
+  usageLogs UsageLog[]
 
   @@unique([companyId, type]) // 1 บริษัท มี 1 Wallet ต่อ 1 Type
   @@index([companyId])
   @@index([qrToken])
+  @@index([qrDisplayToken])
+  @@index([qrDisplayTokenExpiry])
   @@map("wallets")
 }
 
@@ -59,8 +63,8 @@ model TopupLog {
   id          String   @id @default(uuid())
   walletId    String
   wallet      Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  amountAdded Float    // จำนวนที่เติม (ลิตร หรือ เที่ยว)
-  adminId     String   // Admin ที่เติม
+  amountAdded Float // จำนวนที่เติม (ลิตร หรือ เที่ยว)
+  adminId     String // Admin ที่เติม
   admin       User     @relation("AdminTopups", fields: [adminId], references: [id])
   createdAt   DateTime @default(now())
 
@@ -74,9 +78,9 @@ model UsageLog {
   id              String   @id @default(uuid())
   walletId        String
   wallet          Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  amountDeducted  Float    // จำนวนที่ตัด (ลิตร หรือ เที่ยว)
-  durationMinutes Int?     // ระยะเวลาใช้งาน (นาที) - สำหรับเรือเท่านั้น
-  staffId         String   // พนักงานที่ทำรายการ
+  amountDeducted  Float // จำนวนที่ตัด (ลิตร หรือ เที่ยว)
+  durationMinutes Int? // ระยะเวลาใช้งาน (นาที) - สำหรับเรือเท่านั้น
+  staffId         String // พนักงานที่ทำรายการ
   staff           User     @relation("StaffUsages", fields: [staffId], references: [id])
   createdAt       DateTime @default(now())
 
@@ -95,8 +99,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  topups TopupLog[]  @relation("AdminTopups")
-  usages UsageLog[]  @relation("StaffUsages")
+  topups TopupLog[] @relation("AdminTopups")
+  usages UsageLog[] @relation("StaffUsages")
 
   @@map("users")
 }

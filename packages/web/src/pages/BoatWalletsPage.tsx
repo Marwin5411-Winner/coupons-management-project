@@ -272,6 +272,56 @@ export function BoatWalletsPage() {
     }
   };
 
+
+  const handleCopyPublicLink = (wallet: Wallet) => {
+    const publicUrl = window.location.origin.replace(':5173', ':5175');
+    const publicLink = `${publicUrl}/wallet/${wallet.id}`;
+
+    // iOS-compatible clipboard copy
+    const copyToClipboard = (text: string) => {
+      // Try modern clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            alert('คัดลอกลิงก์สำเร็จ! \n' + text);
+          })
+          .catch(() => {
+            // Fallback for iOS/Safari
+            fallbackCopy(text);
+          });
+      } else {
+        // iOS Safari fallback
+        fallbackCopy(text);
+      }
+    };
+
+    const fallbackCopy = (text: string) => {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          alert('คัดลอกลิงก์สำเร็จ! \n' + text);
+        } else {
+          alert('ไม่สามารถคัดลอกลิงก์ได้\nลิงก์: ' + text);
+        }
+      } catch (err) {
+        alert('ไม่สามารถคัดลอกลิงก์ได้\nลิงก์: ' + text);
+      }
+
+      document.body.removeChild(textArea);
+    };
+
+    copyToClipboard(publicLink);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -342,6 +392,12 @@ export function BoatWalletsPage() {
                   className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600"
                 >
                   แก้ไข
+                </button>
+                <button
+                  onClick={() => handleCopyPublicLink(wallet)}
+                  className="w-full bg-pink-500 text-white py-2 rounded hover:bg-pink-600"
+                >
+                  📋 คัดลอกลิงก์ลูกค้า
                 </button>
               </div>
             </div>
