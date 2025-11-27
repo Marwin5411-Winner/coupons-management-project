@@ -54,8 +54,7 @@ export const publicRoutes = new Elysia({ prefix: "/public" })
       }
 
       // Generate QR code with embedded logo - it contains URL to /public/qr/:qrDisplayToken
-      const baseUrl = process.env.PUBLIC_URL || "http://localhost:5175";
-      const qrUrl = `${baseUrl}/public/qr/${qrDisplayToken}`;
+      const qrUrl = `${qrDisplayToken}`;
       const qrCodeDataURL = await generateQRCodeWithLogo(qrUrl, {
         width: 512,
         margin: 2,
