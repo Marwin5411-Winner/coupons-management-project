@@ -9,7 +9,7 @@ import { usageRoutes } from "./routes/usage";
 import { dashboardRoutes } from "./routes/dashboard";
 import { publicRoutes } from "./routes/public";
 
-const PORT = process.env.PORT || 3000;
+const PORT = Bun.env.PORT || 3000;
 
 const app = new Elysia()
   .use(cors({
