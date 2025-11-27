@@ -63,7 +63,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
 
         // Find wallet by QR token - support both qrDisplayToken (public pages) and qrToken (permanent)
         let wallet = await prisma.wallet.findUnique({
-          where: { qrToken: body.qrToken },
+          where: { qrDisplayToken: body.qrToken },
           include: {
             company: {
               select: {

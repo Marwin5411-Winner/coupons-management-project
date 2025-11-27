@@ -76,8 +76,8 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
       setIsValidating(true);
       // Validate with a small amount to check existence and get details
       const validateRes = await api.post('/usage/validate', {
+        qrDisplayToken: qrToken,
         qrToken,
-        amount: 0.01
       });
 
       if (!validateRes.data.valid) {
