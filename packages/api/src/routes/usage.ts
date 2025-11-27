@@ -110,8 +110,8 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
           }
         }
 
-        // Check if balance is sufficient
-        if (wallet.balance < body.amount) {
+        // Check if balance is sufficient (only if amount is provided)
+        if (body.amount !== undefined && wallet.balance < body.amount) {
           return {
             valid: false,
             error: "ยอดคงเหลือไม่เพียงพอ",
@@ -145,7 +145,7 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
     {
       body: t.Object({
         qrToken: t.String(),
-        amount: t.Number({ minimum: 0.01 }),
+        amount: t.Optional(t.Number({ minimum: 0.01 })),
       }),
     }
   )
