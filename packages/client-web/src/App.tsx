@@ -1,23 +1,10 @@
 import { useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
-import { CustomerPortalPage } from './pages/CustomerPortalPage';
 import QRScanner from './components/QRScanner';
-import { useEffect, useState } from 'react';
 
 
 function App() {
   const { isAuthenticated, user, logout } = useAuth();
-  const [walletId, setWalletId] = useState<string | null>(null);
-
-  // Check if the URL is a public wallet page
-  useEffect(() => {
-    const path = window.location.pathname;
-    const walletMatch = path.match(/^\/wallet\/([a-zA-Z0-9-]+)$/);
-
-    if (walletMatch) {
-      setWalletId(walletMatch[1]);
-    }
-  }, []);
 
   const handleScanSuccess = (data: string) => {
     console.log('Scanned coupon code:', data);
@@ -27,10 +14,6 @@ function App() {
     console.error('Scanner error:', error);
   };
 
-  // Show public customer portal if walletId is in URL
-  if (walletId) {
-    return <CustomerPortalPage walletId={walletId} />;
-  }
 
   if (!isAuthenticated) {
     return <LoginPage />;

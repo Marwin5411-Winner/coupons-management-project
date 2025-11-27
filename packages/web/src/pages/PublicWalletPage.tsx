@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import api from '../lib/api';
 
 interface WalletData {
     wallet: {
@@ -22,9 +24,8 @@ interface TopupHistory {
     count: number;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-export function CustomerPortalPage({ walletId }: { walletId: string }) {
+export function PublicWalletPage() {
+    const { id } = useParams<{ id: string }>();
     const [walletData, setWalletData] = useState<WalletData | null>(null);
     const [topupHistory, setTopupHistory] = useState<TopupHistory | null>(null);
     const [loading, setLoading] = useState(true);
@@ -32,25 +33,20 @@ export function CustomerPortalPage({ walletId }: { walletId: string }) {
 
     useEffect(() => {
         const fetchWalletData = async () => {
+            if (!id) return;
+
             try {
                 setLoading(true);
 
                 // Fetch wallet data
-                const walletResponse = await fetch(`${API_BASE_URL}/public/wallet/${walletId}`);
-                if (!walletResponse.ok) {
-                    throw new Error('Wallet not found');
-                }
-                const walletJson = await walletResponse.json();
-                setWalletData(walletJson);
+                const walletResponse = await api.get(`/public/wallet/${id}`);
+                setWalletData(walletResponse.data);
 
                 // Fetch topup history
-                const historyResponse = await fetch(`${API_BASE_URL}/public/wallet/${walletId}/topup-history?limit=20`);
-                if (historyResponse.ok) {
-                    const historyJson = await historyResponse.json();
-                    setTopupHistory(historyJson);
-                }
+                const historyResponse = await api.get(`/public/wallet/${id}/topup-history?limit=20`);
+                setTopupHistory(historyResponse.data);
             } catch (err: any) {
-                setError(err.message || 'Failed to load wallet data');
+                setError(err.response?.data?.error || 'ไม่สามารถโหลดข้อมูลกระเป๋าได้');
             } finally {
                 setLoading(false);
             }
@@ -61,7 +57,7 @@ export function CustomerPortalPage({ walletId }: { walletId: string }) {
         // Auto-refresh every 5 minutes
         const interval = setInterval(fetchWalletData, 5 * 60 * 1000);
         return () => clearInterval(interval);
-    }, [walletId]);
+    }, [id]);
 
     // Calculate time remaining until QR expiry
     const getTimeRemaining = () => {

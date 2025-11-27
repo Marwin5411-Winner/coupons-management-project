@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { prisma } from "../lib/prisma";
 import { randomBytes } from "crypto";
 import QRCode from "qrcode";
+import { generateQRCodeWithLogo } from "../utils/qrcode";
 
 function generateQRDisplayToken(): string {
   return randomBytes(16).toString("hex");
@@ -51,9 +52,6 @@ export const publicRoutes = new Elysia({ prefix: "/public" })
           },
         });
       }
-
-      // Import the helper function
-      const { generateQRCodeWithLogo } = await import('../utils/qrcode');
 
       // Generate QR code with embedded logo - it contains URL to /public/qr/:qrDisplayToken
       const baseUrl = process.env.PUBLIC_URL || "http://localhost:5175";

@@ -8,6 +8,7 @@ import { FuelWalletsPage } from './pages/FuelWalletsPage';
 import { BoatWalletsPage } from './pages/BoatWalletsPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { ScannerPage } from './pages/ScannerPage';
+import { PublicWalletPage } from './pages/PublicWalletPage';
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
@@ -65,6 +66,10 @@ function AppRoutes() {
             <ScannerPage />
           </ProtectedRoute>
         }
+      />
+      <Route
+        path="/wallet/:id"
+        element={<PublicWalletPage />}
       />
       <Route
         path="/"

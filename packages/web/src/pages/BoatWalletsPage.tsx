@@ -274,8 +274,8 @@ export function BoatWalletsPage() {
 
 
   const handleCopyPublicLink = (wallet: Wallet) => {
-    // Use environment variable for public wallet URL, fallback to port replacement for local dev
-    const publicUrl = import.meta.env.VITE_PUBLIC_WALLET_URL || window.location.origin.replace(':5173', ':5175');
+    // Use environment variable for public wallet URL, fallback to current origin
+    const publicUrl = import.meta.env.VITE_PUBLIC_WALLET_URL || window.location.origin;
     const publicLink = `${publicUrl}/wallet/${wallet.id}`;
 
     // iOS-compatible clipboard copy
