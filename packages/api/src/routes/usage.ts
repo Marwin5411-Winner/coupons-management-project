@@ -61,8 +61,8 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
           return { error: "Unauthorized" };
         }
 
-        // Find wallet by QR token
-        const wallet = await prisma.wallet.findUnique({
+        // Find wallet by QR token - support both qrDisplayToken (public pages) and qrToken (permanent)
+        let wallet = await prisma.wallet.findUnique({
           where: { qrToken: body.qrToken },
           include: {
             company: {
@@ -74,6 +74,21 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
           },
         });
 
+        // If not found by qrDisplayToken, try permanent qrToken
+        if (!wallet) {
+          wallet = await prisma.wallet.findUnique({
+            where: { qrToken: body.qrToken },
+            include: {
+              company: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          });
+        }
+
         if (!wallet) {
           set.status = 404;
           return {
@@ -81,6 +96,18 @@ export const usageRoutes = new Elysia({ prefix: "/usage" })
             error: "QR Code ไม่ถูกต้อง",
             message: "Wallet not found"
           };
+        }
+
+        // Check if qrDisplayToken is expired (only if we found by qrDisplayToken)
+        if (wallet.qrDisplayToken === body.qrToken && wallet.qrDisplayTokenExpiry) {
+          const now = new Date();
+          if (wallet.qrDisplayTokenExpiry < now) {
+            return {
+              valid: false,
+              error: "QR Code หมดอายุแล้ว กรุณารีเฟรชหน้าเว็บ",
+              message: "QR Display Token expired"
+            };
+          }
         }
 
         // Check if balance is sufficient

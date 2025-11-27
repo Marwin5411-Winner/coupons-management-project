@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma";
 import { authenticateRequest } from "../utils/auth";
 import { randomBytes } from "crypto";
 import QRCode from "qrcode";
+import { generateQRCodeWithLogo } from "../utils/qrcode";
 
 function generateQRToken(): string {
   return randomBytes(16).toString("hex");
@@ -93,7 +94,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
     }
   })
 
-  // Get wallet by QR token (for scanning)
+  // Get wallet by QR token (for scanning) - supports both qrDisplayToken and permanent qrToken
   .get("/qr/:qrToken", async ({ headers, params, set }) => {
     try {
       const user = await authenticateRequest(headers.authorization);
@@ -102,8 +103,9 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
         return { error: "Unauthorized" };
       }
 
-      const wallet = await prisma.wallet.findUnique({
-        where: { qrToken: params.qrToken },
+      // Try to find by qrDisplayToken first (public QR)
+      let wallet = await prisma.wallet.findUnique({
+        where: { qrDisplayToken: params.qrToken },
         include: {
           company: {
             select: {
@@ -113,6 +115,21 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
           },
         },
       });
+
+      // If not found, try permanent qrToken
+      if (!wallet) {
+        wallet = await prisma.wallet.findUnique({
+          where: { qrToken: params.qrToken },
+          include: {
+            company: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        });
+      }
 
       if (!wallet) {
         set.status = 404;
@@ -209,9 +226,7 @@ export const walletRoutes = new Elysia({ prefix: "/wallets" })
         return { error: "Wallet not found" };
       }
 
-      // Import the helper function
-      const { generateQRCodeWithLogo } = await import('../utils/qrcode');
-      
+
       // Generate QR Code with embedded logo
       const qrCodeDataURL = await generateQRCodeWithLogo(wallet.qrToken, {
         width: 512,
